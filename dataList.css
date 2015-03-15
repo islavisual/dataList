@@ -1,0 +1,13 @@
+/* BugLog 1.0 (https://github.com/islavisual/dataList.git). 
+ * Copyright 2014 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
+ * Author: Pablo E. Fernández (islavisual@gmail.com).
+ * Last update: 15/03/2015
+ */
+input[data-list] { background-image: url(data:png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOtJREFUeNpiZICC9PT0BCDVD8SBM2fOPMBABADqcQBS64G4EKhnAUiMCSoxH0iBsAAQ74caTsgwkJr9UD3zoWYwMEIZ2AxIhNmKxbACqG/QwQImqA3YANxWNMPm4zAMBASYz549u9LExEQByDHAosAAJAdUsxHJMFzBsQDoo0hGJJtBthbgUHwBZgEO+UagYQ3gMMQS0PMZSAMoYc2MLAP02gWgFx8CmaDkwEHAoA9AnIkecYw4YtEAKUngMswRaNgFdAlGPOkMl6E4DcNrINRQAaihBkiRAzLsAy49jETkCJihDIQMAwGAAAMAgcJYQ9I0xNEAAAAASUVORK5CYII=); background-position: 98% 50%; background-repeat: no-repeat; }
+input[data-list] + * + ul            { background: white; border: 1px solid #e0e0e0; color: #000; margin: 0; padding: 0; max-height: 132px; overflow: auto; position: absolute; width: calc(100% - 32px); width: -moz-calc(100% - 32px); width: -webkit-calc(100% - 32px); z-index:1000}
+input[data-list] + * + ul > li       { width:100%; padding:3px 0 3px 8px; display: block; }
+input[data-list] + * + ul > li.hover { background:#384a74; color:#fff; cursor: pointer;  }
+.valueList_dataList                  { height:90px; margin:5px 0; padding: 0 5px; overflow-y: auto; overflow-x:hidden; }
+.valueList_dataList > div:before     { content: ""; font-family: FontAwesome; font-weight: normal;  padding: 0 5px 0 0; float: left }
+.valueList_dataList > div            { position:relative; background-color:#ffffff; color: #000000; display: block; float: left; font-size: 14px; font-weight: bold; margin: 5px 5px 0 0; padding: 5px; width: auto; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; -o-border-radius: 5px; -ms-border-radius: 5px; border: 1px solid #e0e0e0 }
+.valueList_dataList > div span       { font-family: cursive,arial, sans-serif; }
