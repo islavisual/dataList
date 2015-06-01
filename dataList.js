@@ -1,7 +1,7 @@
-// dataList 1.0 (https://github.com/islavisual/dataList). 
+// dataList 1.01 (https://github.com/islavisual/dataList). 
 // Copyright 2015 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 08/02/2015
+// Last update: 01/06/2015
 $.fn.dataList = function(options) {
 	var opt = $.extend({
         addClassIfError:'error',
@@ -13,7 +13,7 @@ $.fn.dataList = function(options) {
         emptyMessage:"No results found",
         error400:"Server understood the request, but request content was invalid",
         error401:"Unauthorized access",
-        error403:"Forbidden resource can't be accessed",
+        error403:"Forbidden resource can\'t be accessed",
         error404:"Not found",
         error500:"Internal server error",
         error503:"Service unavailable",
@@ -28,7 +28,7 @@ $.fn.dataList = function(options) {
         return_mask:"text",
         url:"",
         value_selected_to:"",
-        placeholder:!('placeholder' in document.createElement("input"))
+        placeholder:('placeholder' in document.createElement("input"))
 	}, options );
 
 	var dataListTarget = $(this);
@@ -92,13 +92,16 @@ $.fn.dataList = function(options) {
         }
 
         // Double Click Event
-        $(selector).on("dblclick", function(e){
+        $(selector).on("focusin", function(e){
             var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
             obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
             var val = $(this).val().toUpperCase();
             if(val == '' && $('li', obj).length == 0) get($(this).attr("id"), val, obj, dataListTarget, e);
             else search(val, obj, dataListTarget, e);
+            $(this).attr("data-before", $(this).val());
         });
+
+        $(selector).on("focusout", function(e){ unselectText(e) });
 
         // KeyUp Event
         $(selector).on("keyup", function(e){
@@ -116,6 +119,8 @@ $.fn.dataList = function(options) {
             var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
             obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
             var val = $(this).val().toUpperCase();
+
+            if(e.which == 27){ $(selector).val($(selector).attr("data-before")); }
 
             if(e.keyCode == 40){
                 if(empty($('#'+obj.attr("id")))) return false;
@@ -176,7 +181,10 @@ $.fn.dataList = function(options) {
         get(selector, '', null, dataListTarget, null);
     }
 
-    function isValid(){ if(opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0))){ $(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError) } else if(!opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0))){ $(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError) } else { $(selector).removeAttr('title').removeClass(opt.addClassIfError)}}
+    function unselectText(e){ try { $(e.target).get(0).selectionStart = $(e.target).get(0).value.length; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } catch(ex) {}}
+    function selectText(e){ try { if(isTextSelected($(e.target).get(0))){ $(e.target).get(0).selectionStart = 0; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } } catch(ex) {}}
+    function isTextSelected(input) { if (typeof input.selectionStart == "number") { return input.selectionStart == 0 && input.selectionEnd == input.value.length; } else if (typeof document.selection != "undefined") { input.focus(); return document.selection.createRange().text == input.value; }}
+    function isValid(){ if(opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError) } else if(!opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError) } else { $(selector).removeAttr('title').removeClass(opt.addClassIfError)}}
     function isMobile() { return ('ontouchstart' in document.documentElement);}
 	function empty(e){ if(e.css("display") != 'none' && e.html().indexOf(opt.emptyMessage) != -1) return true; return false; }
 
@@ -290,7 +298,7 @@ $.fn.dataList = function(options) {
         $('#'+$(e).parent().attr("id")).hide();
 	}
 
-	function search(val, ul, input, e){
+    function search(val, ul, input, e){
 		var sdt = opt.datalistAttr;
 		var et  = e.target;
 		var aux = $('#'+input.attr(sdt)+' option');
@@ -317,6 +325,8 @@ $.fn.dataList = function(options) {
 
         $('input['+opt.datalistAttr+'] + * + ul').hide();
 		ul.show();
+        selectText(e);
+
 		$('#'+$(et).attr(sdt)+"_ul li").off("mouseover click");
 		$('#'+$(et).attr(sdt)+"_ul li").on("mouseover", function(e){ if(empty($(this))) return false; $(this).parent().find('li').removeClass("hover"); $(this).addClass("hover"); });
 		$('#'+$(et).attr(sdt)+"_ul li").on("click", function(e){ if(empty($(this))) return false; select(e.target, $(this).html()); });
