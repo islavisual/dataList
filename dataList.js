@@ -1,12 +1,13 @@
-// dataList 1.01 (https://github.com/islavisual/dataList). 
+// dataList 1.0 (https://github.com/islavisual/dataList). 
 // Copyright 2015 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 01/06/2015
+// Last update: 04/06/2015
 $.fn.dataList = function(options) {
 	var opt = $.extend({
         addClassIfError:'error',
         ajax: false,
         ajaxErrorMessage:"Request failed",
+        dataRanking:'enabled',
         datalistAttr: "data-list",
         defaultMessage:'Please, select a choice',
 		default_value:"",
@@ -276,10 +277,13 @@ $.fn.dataList = function(options) {
             for(var x=0; x < aux.length; x++){
                 arr[aux[x]] = val[x];
             }
+            if(opt.dataRanking == 'enabled') arr.text = arr.text.substr(0, arr.text.indexOf(" ("));
             if(typeof arr.value != 'undefined' && arr.value != "") div = div.replace('{value}', arr.value);
             if(typeof arr.text != 'undefined' && arr.text != "") div = div.replace('{text}', arr.text); idx = arr.text;
             valueList.append(div);
             $(selector).val('');
+
+            $(selector).attr('placeholder', opt.defaultMessage)
 
     } else {
             var aux = $(e).parent().attr("id");
@@ -296,12 +300,14 @@ $.fn.dataList = function(options) {
             }
         }
         $('#'+$(e).parent().attr("id")).hide();
+        if(required) dataListTarget.prev().removeAttr("required");
 	}
 
     function search(val, ul, input, e){
 		var sdt = opt.datalistAttr;
 		var et  = e.target;
 		var aux = $('#'+input.attr(sdt)+' option');
+
 		ul.html('');
 		var ulEmpty = true;
 		for(var i=0; i<aux.length; i++){
@@ -309,7 +315,8 @@ $.fn.dataList = function(options) {
 			if(item.val().toUpperCase().indexOf(val) != -1 || item.text().toUpperCase().indexOf(val) != -1){
 				ulEmpty = false;
 				var mask = opt.return_mask.replace('value', item.val()).replace('text', item.text());
-                if(!multiple) ul.html(ul.html()+'<li>'+mask+'</li>');
+                if(opt.dataRanking == "enabled" && typeof item.attr('data-rank') != 'undefined') mask += " ("+item.attr('data-rank')+'<span class="fa fa-star"></span>)';
+                if(!multiple) ul.html(ul.html()+'<li data-rank="'+item.attr('data-rank')+'">'+mask+'</li>');
                 else {
                     var mis = $('input', valueList);
                     var lst = "";
@@ -317,7 +324,7 @@ $.fn.dataList = function(options) {
                         var mi = $(mis[x]);
                         lst += "|"+mi.val()+"|";
                     }
-                    if(lst.indexOf("|"+item.val()+"|") == -1) ul.html(ul.html()+'<li>'+mask+'</li>')
+                    if(lst.indexOf("|"+item.val()+"|") == -1) ul.html(ul.html()+'<li data-rank="'+item.attr('data-rank')+'">'+mask+'</li>')
                 }
 			}
 		}
