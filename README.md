@@ -134,6 +134,9 @@ var optionsDT = { return_mask: 'value - text' };
 <b>url</b>: This parameter indicates the URL where data will recover and, more later, will inserted in 'select tag'. 
 
 <b>value_selected_to</b>: This parameter is used to send the value property of 'select tag' to another field. For example if you want to sent only the ID of a input field inside a form, if you set like value the property the ID property of another element, when selects an option, the value will be copied to that target ID.
+
+NOTE: To can use this option is necessary set "return_mask" property to 'value - text'.
+
 For example: 
 ```javascript 
 var optionsDT = { value_selected_to: 'depends_id' };
@@ -146,10 +149,18 @@ And an example of HTML will be:
             <div>
                 <input name="depends_id" id="depends_id" value="" class="form-control" placeholder="ID value" />
                 <select id="depends" class="form-control" placeholder="Search">
+                    <option value="1">Option A</option>
+                    <option value="2">Option B</option>
+                    <option value="3">Option C</option>
                 </select>
             </div>
     </div>
 </div>
+<script>
+    var optionsDT = { value_selected_to: 'depends_id', return_mask: 'value - text' };
+    $('#depends').dataList(optionsDT);
+</script>
 ```
+
 
 For more information on web design and development don't leave to visit <a target="_blank"  href="http://www.islavisual.com/articulos/desarrollo_web/">islavisual.com</a>.
