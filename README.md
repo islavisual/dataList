@@ -1,4 +1,4 @@
-# dataList
+# dataList 1.04
 dataList is a jQuery plugin to make, easier and usable the use of drop down elements by adding predictive search, events management and styles.
 
 Install
@@ -43,7 +43,13 @@ Default messages
 
 <b>ajaxErrorMessage</b>: Error message if the read/recovery of data fail. By default is 'Request failed'.
 
-<b>datalistAttr</b>: This parameter is the field will save the select name with the options.
+<b>dataRanking</b>: This parameter show the value of 'data-rank' property setted into every option of 'select tag'.
+
+<b>datalistAttr</b>: This parameter is the field will to save the "select tag" name with the options.
+
+<b>defaultMessage</b>: Message by default to use, for example, in 'placeholder' property o 'first option' of "select tag".
+
+<b>defaultMessage</b>: Message by default to use, for example, in 'placeholder' property o 'first option' of "select tag".
 
 ```javascript
 // Define the values
