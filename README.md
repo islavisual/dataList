@@ -74,7 +74,7 @@ var optionsDT = {
 ```
 Default messages Description
 ----------------------------
-<b>addClassIfError</b>: If an error is produced, is added this value to 'class' attribute.
+<b>addClassIfError</b>: If an error is produced, is added this value to 'class' attribute. By default is "error".
 
 <b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
 
@@ -113,13 +113,22 @@ Default messages Description
 <b>multiple_class</b>: Used to customize the results container into multiple 'select tag'. By default is empty. If you use Bootstrap you can set this parameter to "form-control" to add the default styles.
 
 <b>parameterToSend</b>: Used into ajax mode. When the Ajax mode is used, like parameter is sent this name. By default is "query". More later, from PHP for example, you can recover the value of this parameter through of $_REQUEST['query'].
+```javascript 
+var optionsDT = { parameterToSend:'q' };
+```
 
 <b>requiredMessage</b>:  Message to indicates the field is required. By default is "Please, enter at least one value".
 
-<b>return_mask</b>: This parameter indicates the values you want to show. There are two possible options: 
+<b>return_mask</b>: This parameter indicates the values you want to show. There are two possible key options: 
     <ul>
         <li><b>value</b>:Will show the value property.</li>
         <li><b>text</b>:Will show the text property.</li>
     </ul>
+For example:
+```javascript 
+var optionsDT = { return_mask:'text' };
+var optionsDT = { return_mask:'value' };
+var optionsDT = { return_mask:'value - text' };
+```
 
 For more information on web design and development don't leave to visit <a target="_blank"  href="http://www.islavisual.com/articulos/desarrollo_web/">islavisual.com</a>.
