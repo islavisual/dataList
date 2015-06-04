@@ -37,20 +37,6 @@ Advanced Configuration
 
 Default messages
 ----------------
-<b>addClassIfError</b>: If an error is produced, is added this value to 'class' attribute.
-
-<b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
-
-<b>ajaxErrorMessage</b>: Error message if the read/recovery of data fail. By default is 'Request failed'.
-
-<b>dataRanking</b>: This parameter show the value of 'data-rank' property setted into every option of 'select tag'.
-
-<b>datalistAttr</b>: This parameter is the field will to save the "select tag" name with the options.
-
-<b>defaultMessage</b>: Message by default to use, for example, in 'placeholder' property o 'first option' of "select tag".
-
-<b>defaultMessage</b>: Message by default to use, for example, in 'placeholder' property o 'first option' of "select tag".
-
 ```javascript
 // Define the values
 var optionsDT = {
@@ -86,5 +72,32 @@ var optionsDT = {
         optionsDT.url = "pages/get.php";
         $('#select').dataList(optionsDT);
 ```
+Default messages Description
+----------------------------
+<b>addClassIfError</b>: If an error is produced, is added this value to 'class' attribute.
+
+<b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
+
+<b>ajaxErrorMessage</b>: Error message if the read/recovery of data fail. By default is 'Request failed'.
+
+<b>dataRanking</b>: This parameter show the value of 'data-rank' property setted into every option of 'select tag'.
+
+<b>datalistAttr</b>: This parameter is the field will to save the "select tag" name with the options.
+
+<b>defaultMessage</b>: Message by default to use, for example, in 'placeholder' property o 'first option' of "select tag".
+
+<b>default_value</b>: Default value of "select tag".
+
+<b>emptyMessage</b>: Message by default to use when no results found. By default is "No results found".
+
+<b>error400</b>: Used into ajax mode. By default is "Server understood the request, but request content was invalid".
+
+<b>error401</b>: Used into ajax mode. By default is "Unauthorized access".
+
+<b>error403</b>: Used into ajax mode. By default is "Forbidden resource can\'t be accessed".
+
+<b>error404</b>: Used into ajax mode. By default is "Not found".
+
+<b>error500</b>: Used into ajax mode. By default is "Internal server error".
 
 For more information on web design and development don't leave to visit <a target="_blank"  href="http://www.islavisual.com/articulos/desarrollo_web/">islavisual.com</a>.
