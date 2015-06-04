@@ -39,7 +39,12 @@ Default messages
 ----------------
 <b>addClassIfError</b>: If an error is produced, is added this value to 'class' attribute.
 
-<b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode . By default is 'false'.
+<b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
+
+<b>ajaxErrorMessage</b>: Error message if the read/recovery of data fail. By default is 'Request failed'.
+
+<b>datalistAttr</b>: This parameter is the field will save the select name with the options.
+
 ```javascript
 // Define the values
 var optionsDT = {
