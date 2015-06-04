@@ -112,6 +112,10 @@ Default messages Description
 
 <b>multiple_class</b>: Used to customize the results container into multiple 'select tag'. By default is empty. If you use Bootstrap you can set this parameter to "form-control" to add the default styles.
 
+<b>parameterToSend</b>: Used into ajax mode. When the Ajax mode is used, like parameter is sent this name. By default is "query". More later, from PHP for example, you can recover the value of this parameter through of $_REQUEST['query'].
+
+<b>requiredMessage</b>:  Message to indicates the field is required. By default is "Please, enter at least one value".
+
 
 
 For more information on web design and development don't leave to visit <a target="_blank"  href="http://www.islavisual.com/articulos/desarrollo_web/">islavisual.com</a>.
