@@ -88,6 +88,8 @@ Default messages Description
 
 <b>default_value</b>: Default value of "select tag".
 
+<b>method</b>: Used into ajax mode to define the method of recover file. Like possible options ar "get" or "post". By default is "post".
+
 <b>emptyMessage</b>: Message by default to use when no results found. By default is "No results found".
 
 <b>error400</b>: Used into ajax mode. By default is "Server understood the request, but request content was invalid".
@@ -99,5 +101,15 @@ Default messages Description
 <b>error404</b>: Used into ajax mode. By default is "Not found".
 
 <b>error500</b>: Used into ajax mode. By default is "Internal server error".
+
+<b>errorAbort</b>: Used into ajax mode. By default is "Request was aborted by the server".
+
+<b>errorParse</b>: Used into ajax mode. By default is "Parsing JSON request failed".
+
+<b>errorTimeOut</b>: Used into ajax mode. By default is "Request time out".
+
+<b>errorUnknown</b>: Used into ajax mode. By default is "Unknown error".
+
+
 
 For more information on web design and development don't leave to visit <a target="_blank"  href="http://www.islavisual.com/articulos/desarrollo_web/">islavisual.com</a>.
