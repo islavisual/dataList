@@ -12,6 +12,8 @@ Your install is very easy. Only you must insert the following source code files.
 How to use
 ----------
 There are several ways to use
+Basic Use
+=========
 ```html
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -24,6 +26,13 @@ There are several ways to use
     </div>
 ```
 ```javascript
+    <script>
+        $('#select').dataList();
+    </script>
+```
+
+Advanced Configuration
+======================
 // Define the values
 var optionsDT = {
         addClassIfError:'error',
@@ -32,7 +41,7 @@ var optionsDT = {
         dataRanking:'enabled',
         datalistAttr: "data-list",
         defaultMessage:'Please, select a choice',
-		    default_value:"",
+        default_value:"",
         emptyMessage:"No results found",
         error400:"Server understood the request, but request content was invalid",
         error401:"Unauthorized access",
@@ -44,9 +53,9 @@ var optionsDT = {
         errorParse:'Parsing JSON request failed',
         errorTimeOut:'Request time out',
         errorUnknown:'Unknown error',
-		    method: "post",
+        method: "post",
         multiple_class:'',
-		    parameterToSend:"query",
+        parameterToSend:"query",
         requiredMessage:'Please, enter at least one value',
         return_mask:"text",
         url:"",
