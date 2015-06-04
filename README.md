@@ -34,6 +34,12 @@ Basic Use
 
 Advanced Configuration
 ----------------------
+
+Default messages
+----------------
+<b>addClassIfError</b>: If an error is produced, is added this value to 'class' attribute.
+<b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode . By default is 'false'.
+```javascript
 // Define the values
 var optionsDT = {
         addClassIfError:'error',
