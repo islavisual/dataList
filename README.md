@@ -3,9 +3,11 @@ dataList is a jQuery plugin to make, easier and usable the use of drop down elem
 
 Is multilanguage, cross browser compatibility, very customizable and, by your design, is one of fastest of internet.
 
-Example
-=======
+Examples
+========
 ![ScreenShot](https://github.com/islavisual/dataList/blob/master/screenshot.png)
+
+![ScreenShot](https://github.com/islavisual/dataList/blob/master/screenshot_2.png)
 
 Install
 =======
