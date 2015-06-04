@@ -88,8 +88,6 @@ Default messages Description
 
 <b>default_value</b>: Default value of "select tag".
 
-<b>method</b>: Used into ajax mode to define the method of recover file. Like possible options ar "get" or "post". By default is "post".
-
 <b>emptyMessage</b>: Message by default to use when no results found. By default is "No results found".
 
 <b>error400</b>: Used into ajax mode. By default is "Server understood the request, but request content was invalid".
@@ -109,6 +107,10 @@ Default messages Description
 <b>errorTimeOut</b>: Used into ajax mode. By default is "Request time out".
 
 <b>errorUnknown</b>: Used into ajax mode. By default is "Unknown error".
+
+<b>method</b>: Used into ajax mode to define the method of recover file. Like possible options ar "get" or "post". By default is "post".
+
+<b>multiple_class</b>: Used to customize the results container into multiple 'select tag'. By default is empty. If you use Bootstrap you can set this parameter to "form-control" to add the default styles.
 
 
 
