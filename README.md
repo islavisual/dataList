@@ -116,6 +116,10 @@ Default messages Description
 
 <b>requiredMessage</b>:  Message to indicates the field is required. By default is "Please, enter at least one value".
 
-
+<b>return_mask</b>: This parameter indicates the values you want to show. There are two possible options: 
+    <ul>
+        <li><b>value</b>:Will show the value property.</li>
+        <li><b>text</b>:Will show the text property.</li>
+    </ul>
 
 For more information on web design and development don't leave to visit <a target="_blank"  href="http://www.islavisual.com/articulos/desarrollo_web/">islavisual.com</a>.
