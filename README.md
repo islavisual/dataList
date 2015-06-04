@@ -2,7 +2,7 @@
 dataList is a jQuery plugin to make, easier and usable the use of drop down elements by adding predictive search, events management and styles.
 
 Install
--------
+=======
 Your install is very easy. Only you must insert the following source code files.
 ```html
 <script src="js/dataList.js"></script>
@@ -10,10 +10,11 @@ Your install is very easy. Only you must insert the following source code files.
 ```
 
 How to use
-----------
+==========
 There are several ways to use
+
 Basic Use
-=========
+---------
 ```html
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -32,7 +33,7 @@ Basic Use
 ```
 
 Advanced Configuration
-======================
+----------------------
 // Define the values
 var optionsDT = {
         addClassIfError:'error',
