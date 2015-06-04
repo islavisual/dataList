@@ -110,11 +110,6 @@ var optionsDT = {
         url:"",
         value_selected_to:""
     };
-    
-        optionsDT.default_value = '0';
-        optionsDT.value_selected_to = 'get_id';
-        optionsDT.url = "pages/get.php";
-        $('#select').dataList(optionsDT);
 ```
 Default messages Description
 ----------------------------
