@@ -65,8 +65,8 @@ $.fn.dataList = function(options) {
 
         // If selector is multiple
         if(multiple){
-            var c = "";
-            if(opt.multiple_class != "") c = " "+opt.multiple_class;
+            var c = " ";
+            if(opt.multiple_class != "") c += opt.multiple_class;
             valueList = $('<div class="valueList_dataList '+selName+c+'"></div>').insertAfter('#'+dataListTarget.attr(opt.datalistAttr));
             if($('head').html().indexOf('.valueList_dataList > div > span{ float: right; margin:0 0 0 10px; cursor: pointer; }') == -1)
                 $("<style type='text/css'> .valueList_dataList > div > span{ float: right; margin:0 0 0 10px; cursor: pointer; } </style>").appendTo("head");
@@ -277,9 +277,11 @@ $.fn.dataList = function(options) {
             for(var x=0; x < aux.length; x++){
                 arr[aux[x]] = val[x];
             }
-            if(opt.dataRanking == 'enabled') arr.text = arr.text.substr(0, arr.text.indexOf(" ("));
+            if(opt.dataRanking == 'enabled' && arr.text.indexOf(" (") != -1) arr.text = arr.text.substr(0, arr.text.indexOf(" ("));
             if(typeof arr.value != 'undefined' && arr.value != "") div = div.replace('{value}', arr.value);
-            if(typeof arr.text != 'undefined' && arr.text != "") div = div.replace('{text}', arr.text); idx = arr.text;
+            if(typeof arr.text != 'undefined' && arr.text != "") div = div.replace('{text}', arr.text);
+
+            idx = arr.text;
             valueList.append(div);
             $(selector).val('');
 
