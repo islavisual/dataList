@@ -34,6 +34,50 @@ Basic Use
 
 Advanced Configuration
 ----------------------
+<h3>Configuration to single DataList with customized parameters</h3>
+```html
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <select multiple id="select" class="form-control" placeholder="Please, enter a choice">
+                <option value="1">Option A</option>
+                <option value="2">Option B</option>
+                <option value="3">Option C</option>
+            </select>
+        </div>
+    </div>
+```
+```javascript
+    <script>
+        var optionsDT = {
+            emptyMessage:'Without results',
+            parameterToSend:'q',
+            return_mask:'value - text'
+        $('#select').dataList(optionsDT);
+    </script>
+```
+
+<h3>Configuration to multiple DataList with customized parameters</h3>
+```html
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <select id="select" class="form-control" placeholder="Please, enter a choice">
+                <option value="1">Option A</option>
+                <option value="2">Option B</option>
+                <option value="3">Option C</option>
+            </select>
+        </div>
+    </div>
+```
+```javascript
+    <script>
+        var optionsDT = {
+            emptyMessage:'Without results',
+            parameterToSend:'q',
+            return_mask:'value - text',
+            multiple_class: 'form-control'
+        $('#select').dataList(optionsDT);
+    </script>
+```
 
 Default messages
 ----------------
