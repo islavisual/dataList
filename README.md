@@ -56,15 +56,19 @@ Advanced Configuration
     </script>
 ```
 
-<h3>Configuration to multiple DataList with customized parameters</h3>
+<h3>Configuration to DataList of type multiple with customized parameters</h3>
 ```html
     <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-            <select id="select" class="form-control" placeholder="Please, enter a choice" multiple>
-                <option value="1">Option A</option>
-                <option value="2">Option B</option>
-                <option value="3">Option C</option>
-            </select>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+                <div>
+                    <select id="select" class="form-control" placeholder="Search" multiple>
+                        <option value="1">OptionA</option>
+                        <option value="2">OptionB</option>
+                        <option value="3">OptionC</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 ```
@@ -149,7 +153,7 @@ Default messages Description
 
 <b>method</b>: Used into ajax mode to define the method of recover file. Like possible options ar "get" or "post". By default is "post".
 
-<b>multiple_class</b>: Used to customize the results container into multiple 'select tag'. By default is empty. If you use Bootstrap you can set this parameter to "form-control" to add the default styles.
+<b>multiple_class</b>: Used to add a CSS class to the results container into dataList of type multiple. By default is empty. If you use Bootstrap you can set this parameter to "form-control" to add the default styles.
 
 <b>parameterToSend</b>: Used into ajax mode. When the Ajax mode is used, like parameter is sent this name. By default is "query". More later, from PHP for example, you can recover the value of this parameter through of $_REQUEST['query'].
 ```javascript 
