@@ -5,7 +5,7 @@ Is multilanguage, cross browser compatibility, very customizable and, by your de
 
 Example
 =======
-![ScreenShot](https://github.com/islavisual/dataList/edit/master/screenshot.png)
+![ScreenShot](https://github.com/islavisual/dataList/blob/master/screenshot.png)
 
 Install
 =======
