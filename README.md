@@ -114,7 +114,7 @@ Default messages Description
 
 <b>parameterToSend</b>: Used into ajax mode. When the Ajax mode is used, like parameter is sent this name. By default is "query". More later, from PHP for example, you can recover the value of this parameter through of $_REQUEST['query'].
 ```javascript 
-var optionsDT = { parameterToSend:'q' };
+var optionsDT = { parameterToSend: 'q' };
 ```
 
 <b>requiredMessage</b>:  Message to indicates the field is required. By default is "Please, enter at least one value".
@@ -126,9 +126,30 @@ var optionsDT = { parameterToSend:'q' };
     </ul>
 For example:
 ```javascript 
-var optionsDT = { return_mask:'text' };
-var optionsDT = { return_mask:'value' };
-var optionsDT = { return_mask:'value - text' };
+var optionsDT = { return_mask: 'text' };
+var optionsDT = { return_mask: 'value' };
+var optionsDT = { return_mask: 'value - text' };
+```
+
+<b>url</b>: This parameter indicates the URL where data will recover and, more later, will inserted in 'select tag'. 
+
+<b>value_selected_to</b>: This parameter is used to send the value property of 'select tag' to another field. For example if you want to sent only the ID of a input field inside a form, if you set like value the property the ID property of another element, when selects an option, the value will be copied to that target ID.
+For example: 
+```javascript 
+var optionsDT = { value_selected_to: 'depends_id' };
+```
+And an example of HTML will be:
+```html
+<div class="col-xs-9 col-sm-9 col-md-10 col-lg-11">
+    <div class="form-group">
+        <label>ID</label>
+            <div>
+                <input name="depends_id" id="depends_id" value="" class="form-control" placeholder="ID value" />
+                <select id="depends" class="form-control" placeholder="Search">
+                </select>
+            </div>
+    </div>
+</div>
 ```
 
 For more information on web design and development don't leave to visit <a target="_blank"  href="http://www.islavisual.com/articulos/desarrollo_web/">islavisual.com</a>.
