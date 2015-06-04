@@ -60,7 +60,7 @@ Advanced Configuration
 ```html
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-            <select id="select" class="form-control" placeholder="Please, enter a choice">
+            <select id="select" class="form-control" placeholder="Please, enter a choice" multiple>
                 <option value="1">Option A</option>
                 <option value="2">Option B</option>
                 <option value="3">Option C</option>
