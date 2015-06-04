@@ -16,71 +16,69 @@ There are several ways to use
 Basic Use
 ---------
 ```html
-    <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-            <select id="select" class="form-control" placeholder="Please, enter a choice">
-                <option value="1">Option A</option>
-                <option value="2">Option B</option>
-                <option value="3">Option C</option>
-            </select>
-        </div>
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        <select id="select" class="form-control" placeholder="Please, enter a choice">
+            <option value="1">Option A</option>
+            <option value="2">Option B</option>
+            <option value="3">Option C</option>
+        </select>
     </div>
+</div>
 ```
 ```javascript
-    <script>
-        $('#select').dataList();
-    </script>
+<script>
+    $('#select').dataList();
+</script>
 ```
 
 Advanced Configuration
 ----------------------
 <h3>Configuration to single DataList with customized parameters</h3>
 ```html
-    <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-            <select multiple id="select" class="form-control" placeholder="Please, enter a choice">
-                <option value="1">Option A</option>
-                <option value="2">Option B</option>
-                <option value="3">Option C</option>
-            </select>
-        </div>
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        <select multiple id="select" class="form-control" placeholder="Please, enter a choice">
+            <option value="1">Red</option>
+            <option value="2">Green</option>
+            <option value="3">Blue</option>
+        </select>
     </div>
-```
-```javascript
-    <script>
-        var optionsDT = {
-            emptyMessage:'Without results',
-            parameterToSend:'q',
-            return_mask:'value - text'
-        $('#select').dataList(optionsDT);
-    </script>
+</div>
+
+<script>
+    var optionsDT = {
+        emptyMessage:'Without results',
+        parameterToSend:'q',
+        return_mask:'value - text'
+    $('#select').dataList(optionsDT);
+</script>
 ```
 
 <h3>Configuration to DataList of type multiple with customized parameters</h3>
 ```html
-    <div class="row">
-        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-            <div class="form-group">
-                <div>
-                    <select id="select" class="form-control" placeholder="Search" multiple>
-                        <option value="1">OptionA</option>
-                        <option value="2">OptionB</option>
-                        <option value="3">OptionC</option>
-                    </select>
-                </div>
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+            <div>
+                <select id="select" class="form-control" placeholder="Search" multiple>
+                    <option value="1">User 1</option>
+                    <option value="2">User 2</option>
+                    <option value="3">User 3C</option>
+                </select>
             </div>
         </div>
     </div>
-```
-```javascript
-    <script>
-        var optionsDT = {
-            emptyMessage:'Without results',
-            parameterToSend:'q',
-            return_mask:'value - text',
-            multiple_class: 'form-control'
-        $('#select').dataList(optionsDT);
-    </script>
+</div>
+
+<script>
+    var optionsDT = {
+        emptyMessage:'Without results',
+        parameterToSend:'q',
+        return_mask:'value - text',
+        multiple_class: 'form-control'
+    $('#select').dataList(optionsDT);
+</script>
 ```
 
 Default messages
