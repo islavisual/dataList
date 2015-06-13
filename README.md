@@ -1,4 +1,4 @@
-# dataList 1.05
+# dataList 1.06
 dataList is a jQuery plugin to make, easier and usable the use of drop down elements by adding predictive search, events management and styles. In addition, you can combine this plugin with the Bootstrap capabilities or another frameworks.
 
 Is multilanguage, cross browser compatibility, very customizable and, by your design, is one of fastest of internet.
@@ -96,7 +96,8 @@ var optionsDT = {
         addClassIfError:'error',
         ajax: false,
         ajaxErrorMessage:"Request failed",
-        dataRanking:'enabled',
+        allowNewValues:false,
+        dataRanking:false,
         datalistAttr: "data-list",
         defaultMessage:'Please, select a choice',
         default_value:"",
@@ -122,13 +123,15 @@ var optionsDT = {
 ```
 Default messages Description
 ----------------------------
-<b>addClassIfError</b>: If an error is produced, is added this value to 'class' attribute. By default is "error".
+__addClassIfError__: If an error is produced, is added this value to 'class' attribute. By default is "error".
 
 <b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
 
 <b>ajaxErrorMessage</b>: Error message if the read/recovery of data fail. By default is 'Request failed'.
 
-<b>dataRanking</b>: This parameter show the value of 'data-rank' property setted into every option of 'select tag'.
+<b>allowNewValues</b>: This parameter allow to user insert new values when the data is not in the list. By default is 'false'.
+
+<b>dataRanking</b>: This parameter show the value of 'data-rank' property setted into every option of 'select tag'. By default is 'false'.
 
 <b>datalistAttr</b>: This parameter is the field will to save the "select tag" name with the options.
 
