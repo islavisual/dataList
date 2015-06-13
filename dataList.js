@@ -1,7 +1,7 @@
-// dataList 1.0 (https://github.com/islavisual/dataList). 
+// dataList 1.06 (https://github.com/islavisual/dataList). 
 // Copyright 2015 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 04/06/2015
+// Last update: 13/06/2015
 $.fn.dataList = function(options) {
     var opt = $.extend({
         addClassIfError:'error',
