@@ -125,52 +125,52 @@ Default messages Description
 ----------------------------
 __addClassIfError__: If an error is produced, is added this value to 'class' attribute. By default is "error".
 
-<b>ajax</b>: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
+__ajax__: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
 
-<b>ajaxErrorMessage</b>: Error message if the read/recovery of data fail. By default is 'Request failed'.
+__ajaxErrorMessage__: Error message if the read/recovery of data fail. By default is 'Request failed'.
 
-<b>allowNewValues</b>: This parameter allow to user insert new values when the data is not in the list. By default is 'false'.
+__allowNewValues__: This parameter allow to user insert new values when the data is not in the list. By default is 'false'.
 
-<b>dataRanking</b>: This parameter show the value of 'data-rank' property setted into every option of 'select tag'. By default is 'false'.
+__dataRanking__: This parameter show the value of 'data-rank' property setted into every option of 'select tag'. By default is 'false'.
 
-<b>datalistAttr</b>: This parameter is the field will to save the "select tag" name with the options.
+__datalistAttr__: This parameter is the field will to save the "select tag" name with the options.
 
-<b>defaultMessage</b>: Message by default to use, for example, in 'placeholder' property o 'first option' of "select tag".
+__defaultMessage__: Message by default to use, for example, in 'placeholder' property o 'first option' of "select tag".
 
-<b>default_value</b>: Default value of "select tag".
+__default_value__: Default value of "select tag".
 
-<b>emptyMessage</b>: Message by default to use when no results found. By default is "No results found".
+__emptyMessage__: Message by default to use when no results found. By default is "No results found".
 
-<b>error400</b>: Used into ajax mode. By default is "Server understood the request, but request content was invalid".
+__error400__: Used into ajax mode. By default is "Server understood the request, but request content was invalid".
 
-<b>error401</b>: Used into ajax mode. By default is "Unauthorized access".
+__error401__: Used into ajax mode. By default is "Unauthorized access".
 
-<b>error403</b>: Used into ajax mode. By default is "Forbidden resource can\'t be accessed".
+__error403__: Used into ajax mode. By default is "Forbidden resource can\'t be accessed".
 
-<b>error404</b>: Used into ajax mode. By default is "Not found".
+__error404__: Used into ajax mode. By default is "Not found".
 
-<b>error500</b>: Used into ajax mode. By default is "Internal server error".
+__error500__: Used into ajax mode. By default is "Internal server error".
 
-<b>errorAbort</b>: Used into ajax mode. By default is "Request was aborted by the server".
+__errorAbort__: Used into ajax mode. By default is "Request was aborted by the server".
 
-<b>errorParse</b>: Used into ajax mode. By default is "Parsing JSON request failed".
+__errorParse__: Used into ajax mode. By default is "Parsing JSON request failed".
 
-<b>errorTimeOut</b>: Used into ajax mode. By default is "Request time out".
+__errorTimeOut__: Used into ajax mode. By default is "Request time out".
 
-<b>errorUnknown</b>: Used into ajax mode. By default is "Unknown error".
+__errorUnknown__: Used into ajax mode. By default is "Unknown error".
 
-<b>method</b>: Used into ajax mode to define the method of recover file. Like possible options ar "get" or "post". By default is "post".
+__method__: Used into ajax mode to define the method of recover file. Like possible options ar "get" or "post". By default is "post".
 
-<b>multiple_class</b>: Used to add a CSS class to the results container into dataList of type multiple. By default is empty. If you use Bootstrap you can set this parameter to "form-control" to add the default styles.
+__multiple_class__: Used to add a CSS class to the results container into dataList of type multiple. By default is empty. If you use Bootstrap you can set this parameter to "form-control" to add the default styles.
 
-<b>parameterToSend</b>: Used into ajax mode. When the Ajax mode is used, like parameter is sent this name. By default is "query". More later, from PHP for example, you can recover the value of this parameter through of $_REQUEST['query'].
+__parameterToSend__: Used into ajax mode. When the Ajax mode is used, like parameter is sent this name. By default is "query". More later, from PHP for example, you can recover the value of this parameter through of $_REQUEST['query'].
 ```javascript 
 var optionsDT = { parameterToSend: 'q' };
 ```
 
-<b>requiredMessage</b>:  Message to indicates the field is required. By default is "Please, enter at least one value".
+__requiredMessage__:  Message to indicates the field is required. By default is "Please, enter at least one value".
 
-<b>return_mask</b>: This parameter indicates the values you want to show. There are two possible key options: 
+__return_mask__: This parameter indicates the values you want to show. There are two possible key options: 
     <ul>
         <li><b>value</b>:Will show the value property.</li>
         <li><b>text</b>:Will show the text property.</li>
@@ -182,9 +182,9 @@ var optionsDT = { return_mask: 'value' };
 var optionsDT = { return_mask: 'value - text' };
 ```
 
-<b>url</b>: This parameter indicates the URL where data will recover and, more later, will inserted in 'select tag'. 
+__url__: This parameter indicates the URL where data will recover and, more later, will inserted in 'select tag'. 
 
-<b>value_selected_to</b>: This parameter is used to send the value property of 'select tag' to another field. For example if you want to sent only the ID of a input field inside a form, if you set like value the property the ID property of another element, when selects an option, the value will be copied to that target ID.
+__value_selected_to__: This parameter is used to send the value property of 'select tag' to another field. For example if you want to sent only the ID of a input field inside a form, if you set like value the property the ID property of another element, when selects an option, the value will be copied to that target ID.
 
 NOTE: To can use this option is necessary set "return_mask" property to 'value - text'.
 
