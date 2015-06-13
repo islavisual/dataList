@@ -1,4 +1,4 @@
-// dataList 1.06 (https://github.com/islavisual/dataList). 
+// dataList 1.06 (https://github.com/islavisual/dataList).
 // Copyright 2015 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
 // Last update: 13/06/2015
@@ -273,7 +273,7 @@ $.fn.dataList = function(options) {
         var div = '<div>{text}<input type="hidden" value="{value}" name="'+selector.replace('#', '')+'[]"><span onclick="$(this).parent().remove()">X</span></div>';
         var aux = $(e).parent().attr("id");
 
-        if(opt.allowNewValues){
+        if(opt.allowNewValues && typeof v == "undefined"){
             if(multiple){
                 div = div.replace('{text}', $(selector).val());
                 div = div.replace('{value}', '0');
