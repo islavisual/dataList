@@ -1,16 +1,17 @@
-// dataList 1.05 (https://github.com/islavisual/dataList). 
+// dataList 1.0 (https://github.com/islavisual/dataList). 
 // Copyright 2015 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
 // Last update: 04/06/2015
 $.fn.dataList = function(options) {
-	var opt = $.extend({
+    var opt = $.extend({
         addClassIfError:'error',
         ajax: false,
         ajaxErrorMessage:"Request failed",
-        dataRanking:'enabled',
+        allowNewValues:false,
+        dataRanking:false,
         datalistAttr: "data-list",
         defaultMessage:'Please, select a choice',
-		default_value:"",
+        default_value:"",
         emptyMessage:"No results found",
         error400:"Server understood the request, but request content was invalid",
         error401:"Unauthorized access",
@@ -22,23 +23,23 @@ $.fn.dataList = function(options) {
         errorParse:'Parsing JSON request failed',
         errorTimeOut:'Request time out',
         errorUnknown:'Unknown error',
-		method: "post",
+        method: "post",
         multiple_class:'',
-		parameterToSend:"query",
+        parameterToSend:"query",
         requiredMessage:'Please, enter at least one value',
         return_mask:"text",
         url:"",
         value_selected_to:"",
         placeholder:('placeholder' in document.createElement("input"))
-	}, options );
+    }, options );
 
-	var dataListTarget = $(this);
-	var selector  = $(this).selector;
+    var dataListTarget = $(this);
+    var selector  = $(this).selector;
     var multiple  = false;
     var required  = false;
     var valueList = null;
 
-	if(!isMobile()) {
+    if(!isMobile()) {
         $(selector).before('<input autocomplete="off" />');
         var selName = selector.replace("#", '');
         var c = document.getElementById(selName);
@@ -183,32 +184,33 @@ $.fn.dataList = function(options) {
     }
 
     function unselectText(e){ try { $(e.target).get(0).selectionStart = $(e.target).get(0).value.length; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } catch(ex) {}}
+    function selectFirst(){ var item = $('#'+$(selector).attr(opt.datalistAttr)+"_ul li:first-child"); if(item.html() != opt.emptyMessage) item.addClass("hover"); }
     function selectText(e){ try { if(isTextSelected($(e.target).get(0))){ $(e.target).get(0).selectionStart = 0; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } } catch(ex) {}}
     function isTextSelected(input) { if (typeof input.selectionStart == "number") { return input.selectionStart == 0 && input.selectionEnd == input.value.length; } else if (typeof document.selection != "undefined") { input.focus(); return document.selection.createRange().text == input.value; }}
     function isValid(){ if(opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError) } else if(!opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError) } else { $(selector).removeAttr('title').removeClass(opt.addClassIfError)}}
     function isMobile() { return ('ontouchstart' in document.documentElement);}
-	function empty(e){ if(e.css("display") != 'none' && e.html().indexOf(opt.emptyMessage) != -1) return true; return false; }
+    function empty(e){ if(e.css("display") != 'none' && e.html().indexOf(opt.emptyMessage) != -1) return true; return false; }
 
-	function get(t, val, ul, input, e){
-		if(opt.ajax && $.trim($('#'+input.attr(opt.datalistAttr)).html()) == ""){
-			var param = opt.parameterToSend;
+    function get(t, val, ul, input, e){
+        if(opt.ajax && $.trim($('#'+input.attr(opt.datalistAttr)).html()) == ""){
+            var param = opt.parameterToSend;
             $.ajax({url:opt.url, data:param+"="+val, method:opt.method, xhrFields: { withCredentials: true }}).done(function(data) {
-				try { var parseData = JSON.parse(data); } catch(e){ var parseData = data;  }
-				var s = '';
-				if(typeof parseData == 'object'){
-					if(JSON.stringify(parseData)=='[null]' || parseData == null || parseData == []){
-						s += '<option value="false">'+opt.emptyMessage+'</option>';
-					} else {
-						for(var js=0; js<parseData.length; js++){
-							s += '<option value="'+parseData[js].value+'">'+parseData[js].text+'</option>';
-						}
-					}
-				} else {
-					var a = parseData.split('\n');
-					for(var j=0; j<a.length; j++){
-						if($.trim(a[j])!="") s += '<option value="'+a[j]+'">'+a[j]+'</option>';
-					}
-				}
+                try { var parseData = JSON.parse(data); } catch(e){ var parseData = data;  }
+                var s = '';
+                if(typeof parseData == 'object'){
+                    if(JSON.stringify(parseData)=='[null]' || parseData == null || parseData == []){
+                        s += '<option value="false">'+opt.emptyMessage+'</option>';
+                    } else {
+                        for(var js=0; js<parseData.length; js++){
+                            s += '<option value="'+parseData[js].value+'">'+parseData[js].text+'</option>';
+                        }
+                    }
+                } else {
+                    var a = parseData.split('\n');
+                    for(var j=0; j<a.length; j++){
+                        if($.trim(a[j])!="") s += '<option value="'+a[j]+'">'+a[j]+'</option>';
+                    }
+                }
 
                 if(isMobile()){
                     if(opt.default_value != ""){
@@ -233,113 +235,141 @@ $.fn.dataList = function(options) {
 
                 assignByDefault();
 
-			}).error(function(x, text, exception) {
-					var message;
-					var statusErrorMap = {
-						'400' : opt.error400,
-						'401' : opt.error401,
-						'403' : opt.error403,
-						'404' : opt.error404+': '+opt.url,
-						'500' : opt.error500,
-						'503' : opt.error503
-					};
-					if (x.status) {
-						message =statusErrorMap[x.status];
-						if(!message){
-							message=opt.errorUnknown;
-						}
-					}else if(exception=='parsererror'){
-						message=opt.errorParse;
-					}else if(exception=='timeout'){
-						message=opt.errorTimeOut;
-					}else if(exception=='abort'){
-						message=opt.errorAbort;
-					}else {
-						message=opt.errorUnknown;
-					}
-					alert(opt.ajaxErrorMessage+"\n\n"+message);
-			});
-		} else {
-			search(val, ul, input, e);
-		}
-	}
+            }).error(function(x, text, exception) {
+                    var message;
+                    var statusErrorMap = {
+                        '400' : opt.error400,
+                        '401' : opt.error401,
+                        '403' : opt.error403,
+                        '404' : opt.error404+': '+opt.url,
+                        '500' : opt.error500,
+                        '503' : opt.error503
+                    };
+                    if (x.status) {
+                        message =statusErrorMap[x.status];
+                        if(!message){
+                            message=opt.errorUnknown;
+                        }
+                    }else if(exception=='parsererror'){
+                        message=opt.errorParse;
+                    }else if(exception=='timeout'){
+                        message=opt.errorTimeOut;
+                    }else if(exception=='abort'){
+                        message=opt.errorAbort;
+                    }else {
+                        message=opt.errorUnknown;
+                    }
+                    alert(opt.ajaxErrorMessage+"\n\n"+message);
+            });
+        } else {
+            search(val, ul, input, e);
+        }
+    }
 
-	function select(e, v){
+    function select(e, v){
         var vst = opt.value_selected_to;
         var rmk = opt.return_mask;
         var sep = rmk.replace('value', '').replace('text', '');
+        var div = '<div>{text}<input type="hidden" value="{value}" name="'+selector.replace('#', '')+'[]"><span onclick="$(this).parent().remove()">X</span></div>';
+        var aux = $(e).parent().attr("id");
 
-        if(multiple){
-            var div = '<div>{text}<input type="hidden" value="{value}" name="'+selector.replace('#', '')+'[]"><span onclick="$(this).parent().remove()">X</span></div>';
-            var aux = rmk.split(sep);
-            var val = v.split(sep);
-            var arr = {};
-            for(var x=0; x < aux.length; x++){
-                arr[aux[x]] = val[x];
-            }
-            if(opt.dataRanking == 'enabled' && arr.text.indexOf(" (") != -1) arr.text = arr.text.substr(0, arr.text.indexOf(" ("));
-            if(typeof arr.value != 'undefined' && arr.value != "") div = div.replace('{value}', arr.value);
-            if(typeof arr.text != 'undefined' && arr.text != "") div = div.replace('{text}', arr.text);
+        if(opt.allowNewValues){
+            if(multiple){
+                div = div.replace('{text}', $(selector).val());
+                div = div.replace('{value}', '0');
+                valueList.append(div);
+                $(selector).val('');
 
-            idx = arr.text;
-            valueList.append(div);
-            $(selector).val('');
-
-            $(selector).attr('placeholder', opt.defaultMessage)
-
-    } else {
-            var aux = $(e).parent().attr("id");
-            aux = aux.substr(0, aux.indexOf("_"));
-            var val = v;
-            if(rmk.indexOf('text') != -1 && rmk.indexOf('value') != -1){
-                var pv = rmk.split('value');
-
-                var l = val.split(rmk.replace('value', '').replace('text', ''));
-                $('#'+vst).val(l[pv[0]==''?0:1]);
-                $('#'+aux).val(l[pv[0]==''?1:0]);
+                $(selector).attr('placeholder', opt.defaultMessage)
             } else {
-                $('#'+aux).val(val);
+                if(rmk.indexOf('text') != -1 && rmk.indexOf('value') != -1){
+                    var val = $(selector).val();
+                    var pv = val;
+
+                    var l = val.split(rmk.replace('value', '').replace('text', ''));
+                    $('#'+vst).val('0');
+                    $('#'+aux).val(val);
+                } else {
+                    $('#'+aux).val(val);
+                }
             }
+
+            $('#'+$(selector).attr(opt.datalistAttr)+"_ul").hide();
+        } else {
+            if(multiple){
+                aux = rmk.split(sep);
+                var val = v.split(sep);
+                var arr = {};
+                for(var x=0; x < aux.length; x++){
+                    arr[aux[x]] = val[x];
+                }
+                if(opt.dataRanking && arr.text.indexOf(" (") != -1) arr.text = arr.text.substr(0, arr.text.indexOf(" ("));
+                if(typeof arr.value != 'undefined' && arr.value != "") div = div.replace('{value}', arr.value);
+                if(typeof arr.text != 'undefined' && arr.text != "") div = div.replace('{text}', arr.text);
+
+                idx = arr.text;
+                valueList.append(div);
+                $(selector).val('');
+
+                $(selector).attr('placeholder', opt.defaultMessage)
+
+            } else {
+                aux = aux.substr(0, aux.indexOf("_"));
+                var val = v;
+                if(rmk.indexOf('text') != -1 && rmk.indexOf('value') != -1){
+                    var pv = rmk.split('value');
+
+                    var l = val.split(rmk.replace('value', '').replace('text', ''));
+                    $('#'+vst).val(l[pv[0]==''?0:1]);
+                    $('#'+aux).val(l[pv[0]==''?1:0]);
+                } else {
+                    $('#'+aux).val(val);
+                }
+            }
+            $('#'+$(e).parent().attr("id")).hide();
         }
-        $('#'+$(e).parent().attr("id")).hide();
         if(required) dataListTarget.prev().removeAttr("required");
-	}
+    }
 
     function search(val, ul, input, e){
-		var sdt = opt.datalistAttr;
-		var et  = e.target;
-		var aux = $('#'+input.attr(sdt)+' option');
+        var sdt = opt.datalistAttr;
+        var et  = e.target;
+        var aux = $('#'+input.attr(sdt)+' option');
 
-		ul.html('');
-		var ulEmpty = true;
-		for(var i=0; i<aux.length; i++){
-			var item = aux.eq(i);
-			if(item.val().toUpperCase().indexOf(val) != -1 || item.text().toUpperCase().indexOf(val) != -1){
-				ulEmpty = false;
-				var mask = opt.return_mask.replace('value', item.val()).replace('text', item.text());
-                if(opt.dataRanking == "enabled" && typeof item.attr('data-rank') != 'undefined') mask += " ("+item.attr('data-rank')+'<span class="fa fa-star"></span>)';
-                if(!multiple) ul.html(ul.html()+'<li data-rank="'+item.attr('data-rank')+'">'+mask+'</li>');
-                else {
+        ul.html('');
+        var ulEmpty = true;
+        for(var i=0; i<aux.length; i++){
+            var item = aux.eq(i);
+            var dataRank = typeof item.attr('data-rank') != 'undefined';
+
+            if(item.val().toUpperCase().indexOf(val) != -1 || item.text().toUpperCase().indexOf(val) != -1){
+                ulEmpty = false;
+                var mask = opt.return_mask.replace('value', item.val()).replace('text', item.text());
+                if(opt.dataRanking && dataRank) mask += " ("+item.attr('data-rank')+'<span class="fa fa-star"></span>)';
+                if(!multiple){
+                    ul.html(ul.html()+(dataRank?('<li data-rank="'+item.attr('data-rank')+'">'):('<li>'))+mask+'</li>');
+                } else {
                     var mis = $('input', valueList);
                     var lst = "";
                     for(var x = 0; x < mis.length; ++x){
                         var mi = $(mis[x]);
                         lst += "|"+mi.val()+"|";
                     }
-                    if(lst.indexOf("|"+item.val()+"|") == -1) ul.html(ul.html()+'<li data-rank="'+item.attr('data-rank')+'">'+mask+'</li>')
+                    if(lst.indexOf("|"+item.val()+"|") == -1) ul.html(ul.html()+(dataRank?('<li data-rank="'+item.attr('data-rank')+'">'):('<li>'))+mask+'</li>')
                 }
-			}
-		}
-		if(ulEmpty) ul.html(ul.html()+'<li style="cursor: text">'+opt.emptyMessage+'</li>');
+            }
+        }
+        if(ulEmpty) ul.html(ul.html()+'<li style="cursor: text">'+opt.emptyMessage+'</li>');
 
         $('input['+opt.datalistAttr+'] + * + ul').hide();
-		ul.show();
+        ul.show();
+        selectFirst();
         selectText(e);
 
-		$('#'+$(et).attr(sdt)+"_ul li").off("mouseover click");
-		$('#'+$(et).attr(sdt)+"_ul li").on("mouseover", function(e){ if(empty($(this))) return false; $(this).parent().find('li').removeClass("hover"); $(this).addClass("hover"); });
-		$('#'+$(et).attr(sdt)+"_ul li").on("click", function(e){ if(empty($(this))) return false; select(e.target, $(this).html()); });
-	}
+        $('#'+$(et).attr(sdt)+"_ul li").off("mouseover click");
+        $('#'+$(et).attr(sdt)+"_ul li").on("mouseover", function(e){ if(empty($(this))) return false; $(this).parent().find('li').removeClass("hover"); $(this).addClass("hover"); });
+        $('#'+$(et).attr(sdt)+"_ul li").on("click", function(e){ if(empty($(this))) return false; select(e.target, $(this).html()); });
+    }
 
     function assignByDefault(){
         if($(selector)[0].nodeName == "INPUT") {
