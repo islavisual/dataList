@@ -8,6 +8,7 @@ $.fn.dataList = function(options) {
         ajax: false,
         ajaxErrorMessage:"Request failed",
         allowNewValues:false,
+        clearOnFocus: false,
         dataRanking:false,
         datalistAttr: "data-list",
         defaultMessage:'Please, select a choice',
@@ -95,6 +96,8 @@ $.fn.dataList = function(options) {
 
         // Double Click Event
         $(selector).on("focusin", function(e){
+            if(opt.clearOnFocus) $(this).val("");
+            
             var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
             obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
             var val = $(this).val().toUpperCase();
@@ -103,7 +106,7 @@ $.fn.dataList = function(options) {
             $(this).attr("data-before", $(this).val());
         });
 
-        $(selector).on("focusout", function(e){ unselectText(e) });
+        $(selector).on("focusout", function(e){ unselectText(e); if(opt.clearOnFocus && $(this).val() == "") $(this).val(opt.default_value)  });
 
         // KeyUp Event
         $(selector).on("keyup", function(e){
