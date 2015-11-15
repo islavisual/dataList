@@ -1,4 +1,4 @@
-# dataList 1.06
+# dataList 1.07
 dataList is a jQuery plugin to make, easier and usable the use of drop down elements by adding predictive search, events management and styles. In addition, you can combine this plugin with the Bootstrap capabilities or another frameworks.
 
 Is multilanguage, cross browser compatibility, very customizable and, by your design, is one of fastest of internet.
@@ -132,6 +132,8 @@ __ajax__: This parameter indicates if the read/recovery of data will do in async
 __ajaxErrorMessage__: Error message if the read/recovery of data fail. By default is 'Request failed'.
 
 __allowNewValues__: This parameter allow to user insert new values when the data is not in the list. By default is 'false'.
+
+__clearOnFocus__: This parameter set the value to empty when the focus event is invoked. When the blur event is invoked, if the value continues empty, the default value is restored.
 
 __dataRanking__: This parameter show the value of 'data-rank' property setted into every option of 'select tag'. By default is 'false'.
 
