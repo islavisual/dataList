@@ -274,7 +274,7 @@ $.fn.dataList = function(options) {
         var vst = opt.value_selected_to;
         var rmk = opt.return_mask;
         var sep = rmk.replace('value', '').replace('text', '');
-        var div = '<div>{text}<input type="hidden" value="{value}" name="'+selector.replace('#', '')+'[]"><span onclick="$(this).parent().remove()">X</span></div>';
+        var div = '<div>{text}<input type="hidden" value="{value}" name="'+selector.replace('#', '')+'[]"><span onclick="event.preventDefault(); event.stopImmediatePropagation(); $(this).parent().remove();">X</span></div>';
         var aux = $(e).parent().attr("id");
 
         if(opt.allowNewValues && typeof v == "undefined"){
