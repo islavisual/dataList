@@ -1,7 +1,7 @@
-// dataList 1.07 (https://github.com/islavisual/dataList).
-// Copyright 2015 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
+// dataList 1.08 (https://github.com/islavisual/dataList).
+// Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 15/11/2015
+// Last update: 22/01/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         addClassIfError:'error',
@@ -35,14 +35,15 @@ $.fn.dataList = function(options) {
     }, options );
 
     var dataListTarget = $(this);
-    var selector  = $(this).selector;
+    var selector  = "#"+$(this).attr("id");
     var multiple  = false;
     var required  = false;
     var valueList = null;
 
     if(!isMobile()) {
         $(selector).before('<input autocomplete="off" />');
-        var selName = selector.replace("#", '');
+		
+		var selName = selector.replace("#", '');
         var c = document.getElementById(selName);
 
         // Copy the attriibutes to new input
@@ -384,7 +385,7 @@ $.fn.dataList = function(options) {
     }
 
     if(!opt.ajax){
-        $(window).load(function (){
+        $(window).on("load", function (){
             assignByDefault();
         });
     }
