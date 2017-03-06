@@ -1,7 +1,7 @@
-// dataList 1.08 (https://github.com/islavisual/dataList).
+// dataList 1.09 (https://github.com/islavisual/dataList).
 // Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 22/01/2017
+// Last update: 06/03/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         addClassIfError:'error',
@@ -170,7 +170,7 @@ $.fn.dataList = function(options) {
         });
 
         $('body').on('click.hideMenu', function(e) {if(e.target.id == "") $('input['+opt.datalistAttr+'] + * + ul').hide();});
-        $(selector).on("keypress", function(e){ if(e.which == 13){ var targetID = $('#'+$(e.target).attr(opt.datalistAttr)+"_ul li.hover"); select(targetID, targetID.html()); return false; } });
+        $(selector).on("keypress", function(e){ if(e.which == 13){ var targetID = $('#'+$(e.target).attr(opt.datalistAttr)+"_ul li.hover"); select(targetID[0], targetID.html()); return false; } });
 
         $(selector).focusin(function(e){ if(!opt.placeholder){ if($(e.target).val() == opt.requiredMessage) $(e.target).val('')}});
         $(selector).focusout(function(e){
@@ -295,6 +295,7 @@ $.fn.dataList = function(options) {
                     $('#'+aux).val(val);
                 } else {
                     $('#'+aux).val(val);
+                    if(opt.value_selected_to != "") $('#'+vst).val(e.getAttribute("data-value"));
                 }
             }
 
@@ -328,6 +329,7 @@ $.fn.dataList = function(options) {
                     $('#'+aux).val(l[pv[0]==''?1:0]);
                 } else {
                     $('#'+aux).val(val);
+                    if(opt.value_selected_to != "") $('#'+vst).val(e.getAttribute("data-value"));
                 }
             }
             $('#'+$(e).parent().attr("id")).hide();
@@ -351,7 +353,7 @@ $.fn.dataList = function(options) {
                 var mask = opt.return_mask.replace('value', item.val()).replace('text', item.text());
                 if(opt.dataRanking && dataRank) mask += " ("+item.attr('data-rank')+'<span class="fa fa-star"></span>)';
                 if(!multiple){
-                    ul.html(ul.html()+(dataRank?('<li data-rank="'+item.attr('data-rank')+'">'):('<li>'))+mask+'</li>');
+                    ul.html(ul.html()+(dataRank?('<li data-rank="'+item.attr('data-rank')+'">'):('<li data-value="'+item.val()+'">'))+mask+'</li>');
                 } else {
                     var mis = $('input', valueList);
                     var lst = "";
@@ -359,7 +361,7 @@ $.fn.dataList = function(options) {
                         var mi = $(mis[x]);
                         lst += "|"+mi.val()+"|";
                     }
-                    if(lst.indexOf("|"+item.val()+"|") == -1) ul.html(ul.html()+(dataRank?('<li data-rank="'+item.attr('data-rank')+'">'):('<li>'))+mask+'</li>')
+                    if(lst.indexOf("|"+item.val()+"|") == -1) ul.html(ul.html()+(dataRank?('<li data-rank="'+item.attr('data-rank')+'">'):('<li data-value="'+item.val()+'">'))+mask+'</li>')
                 }
             }
         }
