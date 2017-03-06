@@ -1,4 +1,4 @@
-# dataList 1.08
+# dataList 1.09
 dataList is a jQuery plugin to make, easier and usable the use of drop down elements by adding predictive search, events management and styles. In addition, you can combine this plugin with the Bootstrap capabilities or another frameworks.
 
 Is multilanguage, cross browser compatibility, very customizable and, by your design, is one of fastest of internet.
@@ -60,6 +60,7 @@ Advanced Configuration
         emptyMessage:'Without results',
         parameterToSend:'q',
         return_mask:'value - text'
+    };
     $('#select').dataList(optionsDT);
 </script>
 ```
@@ -86,6 +87,34 @@ Advanced Configuration
         parameterToSend:'q',
         return_mask:'value - text',
         multiple_class: 'form-control'
+    };
+    $('#select').dataList(optionsDT);
+</script>
+```
+
+<h3>Configuration to DataList with SELECT simulate</h3>
+```html
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+            <div>
+                <input type="hidden" name="username" id="username" value="" />
+                <select id="usernameList" class="form-control" placeholder="Search">
+                    <option value="1">Paul</option>
+                    <option value="2">John</option>
+                    <option value="3">Clarise</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var optionsDT = {
+        return_mask:'text',
+        value_selected_to:'username', 
+        clearOnFocus: true
+    };
     $('#select').dataList(optionsDT);
 </script>
 ```
