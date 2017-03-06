@@ -43,11 +43,30 @@ Basic Use
 
 Advanced Use
 ------------
+<h3>Set default value or selected value</h3>
+```html
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        <select multiple id="languages" class="form-control" placeholder="Please, enter a choice">
+            <option value="en">English</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="es">Spain</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    var optionsDT = { default_value: 'es' };
+    $('#languages').dataList(optionsDT);
+</script>
+```
+
 <h3>DataList configuration with custom parameters</h3>
 ```html
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-        <select multiple id="select" class="form-control" placeholder="Please, enter a choice">
+        <select multiple id="colors" class="form-control" placeholder="Please, enter a choice">
             <option value="1">Red</option>
             <option value="2">Green</option>
             <option value="3">Blue</option>
@@ -61,7 +80,7 @@ Advanced Use
         parameterToSend:'q',
         return_mask:'value - text'
     };
-    $('#select').dataList(optionsDT);
+    $('#colors').dataList(optionsDT);
 </script>
 ```
 
@@ -71,7 +90,7 @@ Advanced Use
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
         <div class="form-group">
             <div>
-                <select id="select" class="form-control" placeholder="Search" multiple>
+                <select id="users" class="form-control" placeholder="Search" multiple>
                     <option value="1">User 1</option>
                     <option value="2">User 2</option>
                     <option value="3">User 3C</option>
@@ -88,7 +107,7 @@ Advanced Use
         return_mask:'value - text',
         multiple_class: 'form-control'
     };
-    $('#select').dataList(optionsDT);
+    $('#users').dataList(optionsDT);
 </script>
 ```
 
@@ -115,7 +134,7 @@ Advanced Use
         value_selected_to:'username', 
         clearOnFocus: true
     };
-    $('#select').dataList(optionsDT);
+    $('#usernameList').dataList(optionsDT);
 </script>
 ```
 
