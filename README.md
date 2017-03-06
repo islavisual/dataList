@@ -41,9 +41,9 @@ Basic Use
 </script>
 ```
 
-Advanced Configuration
-----------------------
-<h3>Configuration to single DataList with customized parameters</h3>
+Advanced Use
+------------
+<h3>DataList configuration with custom parameters</h3>
 ```html
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -65,7 +65,7 @@ Advanced Configuration
 </script>
 ```
 
-<h3>Configuration to DataList of type multiple with customized parameters</h3>
+<h3>DataList configuration of type multiple with custom parameters</h3>
 ```html
 <div class="row">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -92,7 +92,7 @@ Advanced Configuration
 </script>
 ```
 
-<h3>Configuration to DataList with SELECT simulate</h3>
+<h3>DataList configuration simulating a SELECT tag</h3>
 ```html
 <div class="row">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
