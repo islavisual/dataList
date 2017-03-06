@@ -62,24 +62,20 @@ Advanced Use
 </script>
 ```
 
-<h3>DataList configuration with custom parameters</h3>
+<h3>DataList configuration with data ranking</h3>
 ```html
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
         <select multiple id="colors" class="form-control" placeholder="Please, enter a choice">
-            <option value="1">Red</option>
-            <option value="2">Green</option>
-            <option value="3">Blue</option>
+            <option value="1" data-rank="2.5">Red</option>
+            <option value="2" data-rank="4.0">Green</option>
+            <option value="3" data-rank="5.0">Blue</option>
         </select>
     </div>
 </div>
 
 <script>
-    var optionsDT = {
-        emptyMessage:'Without results',
-        parameterToSend:'q',
-        return_mask:'value - text'
-    };
+    var optionsDT = { dataRanking: true, return_mask:'text' };
     $('#colors').dataList(optionsDT);
 </script>
 ```
