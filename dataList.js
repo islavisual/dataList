@@ -1,9 +1,6 @@
-// dataList 1.09 (https://github.com/islavisual/dataList).
-// Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
-// Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 06/03/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
+		autoSelectable: false,
         addClassIfError:'error',
         ajax: false,
         ajaxErrorMessage:"Request failed",
@@ -13,7 +10,7 @@ $.fn.dataList = function(options) {
         datalistAttr: "data-list",
         defaultMessage:'Please, select a choice',
         default_value:"",
-        emptyMessage:"No results found",
+		emptyMessage:"No results found",
         error400:"Server understood the request, but request content was invalid",
         error401:"Unauthorized access",
         error403:"Forbidden resource can\'t be accessed",
@@ -29,6 +26,7 @@ $.fn.dataList = function(options) {
         parameterToSend:"query",
         requiredMessage:'Please, enter at least one value',
         return_mask:"text",
+		selected_value:"",
         url:"",
         value_selected_to:"",
         placeholder:('placeholder' in document.createElement("input"))
@@ -39,156 +37,9 @@ $.fn.dataList = function(options) {
     var multiple  = false;
     var required  = false;
     var valueList = null;
-
-    if(!isMobile()) {
-        $(selector).before('<input autocomplete="off" />');
-		
-		var selName = selector.replace("#", '');
-        var c = document.getElementById(selName);
-
-        // Copy the attriibutes to new input
-        for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){
-            var attr = atts[i].nodeName;
-            dataListTarget.prev().attr(attr, dataListTarget.attr(attr));
-            if(attr == 'multiple') multiple = true;
-            if(attr == 'required') required = true;
-        }
-
-        if(multiple) dataListTarget.prev().removeAttr("name");
-        if(required && multiple) dataListTarget.prev().removeAttr("required");
-
-        // Remove attributes to selector
-        dataListTarget.prev().attr(opt.datalistAttr, selName+'_dataList');
-        for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){ dataListTarget.removeAttr(atts[0].nodeName); }
-
-        // Hide the select tag
-        $(selector).next().attr('id', selName+'_dataList').css('display', 'none');
-        dataListTarget = $('input'+selector);
-        get(selName, '', $('#'+$('#'+selName).attr(opt.datalistAttr)).next(), dataListTarget, $(selName));
-
-        // If selector is multiple
-        if(multiple){
-            var c = " ";
-            if(opt.multiple_class != "") c += opt.multiple_class;
-            valueList = $('<div class="valueList_dataList '+selName+c+'"></div>').insertAfter('#'+dataListTarget.attr(opt.datalistAttr));
-            if($('head').html().indexOf('.valueList_dataList > div > span{ float: right; margin:0 0 0 10px; cursor: pointer; }') == -1)
-                $("<style type='text/css'> .valueList_dataList > div > span{ float: right; margin:0 0 0 10px; cursor: pointer; } </style>").appendTo("head");
-        }
-
-        // Insert unsorted list after selector
-        $('<ul></ul>').insertAfter('#'+dataListTarget.attr(opt.datalistAttr)).hide();
-
-        // If dataList is multiple and required, add new associate event
-        if(required && multiple){
-            var frm = $(selector).parents('form');
-            $(frm).submit(function(e){
-                if($('input', valueList).length == 0){
-                    if(opt.placeholder){
-                        $(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError);
-                    } else {
-                        $(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError);
-                    }
-
-                    e.preventDefault();
-                    return false;
-               }
-            });
-        }
-
-        // Double Click Event
-        $(selector).on("focusin", function(e){
-            if(opt.clearOnFocus) $(this).val("");
-            
-            var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
-            obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
-            var val = $(this).val().toUpperCase();
-            if(val == '' && $('li', obj).length == 0) get($(this).attr("id"), val, obj, dataListTarget, e);
-            else search(val, obj, dataListTarget, e);
-            $(this).attr("data-before", $(this).val());
-        });
-
-        $(selector).on("focusout", function(e){ unselectText(e); if(opt.clearOnFocus && $(this).val() == "") $(this).val(opt.default_value)  });
-
-        // KeyUp Event
-        $(selector).on("keyup", function(e){
-            var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
-            obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
-            var val = $(this).val().toUpperCase();
-
-            if((e.keyCode == 27 || ((e.keyCode == 8 || e.keyCode == 46)) && val=="") || (e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40)){
-                get($(this).attr("id"), val, obj, dataListTarget, e);
-            }
-        });
-
-        // KeyDown Event
-        $(selector).on("keydown", function(e){
-            var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
-            obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
-            var val = $(this).val().toUpperCase();
-
-            if(e.which == 27){ $(selector).val($(selector).attr("data-before")); }
-
-            if(e.keyCode == 40){
-                if(empty($('#'+obj.attr("id")))) return false;
-                if(obj.css("display") == 'none'){
-                    if(val == '' && $('li', obj).length == 0) get($(this).attr("id"), val, obj, dataListTarget, e);
-                    else search(val, obj, dataListTarget, e);
-                }
-                obj.show();
-                var firstSel = $('li.hover:first', obj);
-                if(firstSel.length > 0 && firstSel.length - firstSel.index() != 1){ var target = firstSel.next(); } else { var target = $('li:not(.hover):first', obj); }
-
-                target.addClass("hover");
-                if(firstSel.length > 0) firstSel.removeClass("hover");
-                if(firstSel.index() == $('li',obj).length -1) { target = $('li:not(.hover):first', obj); target.addClass("hover"); }
-
-                var s = target.parent().scrollTop(), h = target.parent().height(), p = target.position().top;
-                if(p +target.innerHeight() > h) target.parent().scrollTop(s+target.innerHeight());
-                else if(p <= 0) target.parent().scrollTop(0);
-
-            } else if(e.keyCode == 38){
-                if(empty($('#'+obj.attr("id")))) return false;
-                var firstSel = $('li.hover:first', obj);
-                if(firstSel.length > 0){ var target = firstSel.prev(); } else { var target = $('li:not(.hover):first', obj); }
-
-                target.addClass("hover");
-                if(firstSel.length > 0) firstSel.removeClass("hover");
-                if(firstSel.index() == 0) { target = $('li:not(.hover):last', obj); target.addClass("hover"); }
-
-                var s = target.parent().scrollTop(), h = target.parent().height(), p = target.position().top;
-                if(p < 0) target.parent().scrollTop(s+p);
-                else if(s == 0 && p == target.innerHeight()*target.index()) target.parent().scrollTop(p-h+target.innerHeight());
-            } else if(e.keyCode == 9){
-                var e = $.Event('keypress');
-                e.which = 13;
-                $('#'+$(this).attr("id")).trigger(e);
-                $('input['+opt.datalistAttr+'] + * + ul').hide();
-
-            } else if((e.keyCode == 27 || ((e.keyCode == 8 || e.keyCode == 46)) && val=="") || e.keyCode != 13){
-                get($(this).attr("id"), val, obj, dataListTarget, e);
-            }
-        });
-
-        $('body').on('click.hideMenu', function(e) {if(e.target.id == "") $('input['+opt.datalistAttr+'] + * + ul').hide();});
-        $(selector).on("keypress", function(e){ if(e.which == 13){ var targetID = $('#'+$(e.target).attr(opt.datalistAttr)+"_ul li.hover"); select(targetID[0], targetID.html()); return false; } });
-
-        $(selector).focusin(function(e){ if(!opt.placeholder){ if($(e.target).val() == opt.requiredMessage) $(e.target).val('')}});
-        $(selector).focusout(function(e){
-            setTimeout(function(){ isValid(); }, 100);
-        });
-
-    } else {
-        var vst = opt.value_selected_to;
-        if(vst != ""){
-            $(selector).on("change", function(){
-                $('#'+vst).val($(this).val());
-            });
-        }
-        get(selector, '', null, dataListTarget, null);
-    }
-
-    function unselectText(e){ try { $(e.target).get(0).selectionStart = $(e.target).get(0).value.length; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } catch(ex) {}}
-    function selectFirst(){ var item = $('#'+$(selector).attr(opt.datalistAttr)+"_ul li:first-child"); if(item.html() != opt.emptyMessage) item.addClass("hover"); }
+	
+	function unselectText(e){ try { $(e.target).get(0).selectionStart = $(e.target).get(0).value.length; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } catch(ex) {}}
+    function selectFirst(){ var item = $('#'+$(selector).attr(opt.datalistAttr)+"_ul li:first-child"); if(item.html() != opt.emptyMessage && opt.autoSelectable) item.addClass("hover"); }
     function selectText(e){ try { if(isTextSelected($(e.target).get(0))){ $(e.target).get(0).selectionStart = 0; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } } catch(ex) {}}
     function isTextSelected(input) { if (typeof input.selectionStart == "number") { return input.selectionStart == 0 && input.selectionEnd == input.value.length; } else if (typeof document.selection != "undefined") { input.focus(); return document.selection.createRange().text == input.value; }}
     function isValid(){ if(opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError) } else if(!opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError) } else { $(selector).removeAttr('title').removeClass(opt.addClassIfError)}}
@@ -217,13 +68,13 @@ $.fn.dataList = function(options) {
                 }
 
                 if(isMobile()){
-                    if(opt.default_value != ""){
+                    if(opt.selected_value != ""){
                         var defaultItem = null;
                         $(selector).html('<option value="" >'+opt.defaultMessage+'</option>'+s);
                         var items = $(selector+' option');
                         for(var x = 0; x < items.length; ++x){
                             var item = $(items[x]);
-                            if(item.val() == opt.default_value){ item.attr('selected', 'selected'); defaultItem = item; }
+                            if(item.val() == opt.selected_value){ item.attr('selected', 'selected'); defaultItem = item; }
                         }
                     } else {
                         $(selector).html('<option value="" selected="selected" >'+opt.defaultMessage+'</option>'+s);
@@ -316,21 +167,27 @@ $.fn.dataList = function(options) {
                 valueList.append(div);
                 $(selector).val('');
 
-                $(selector).attr('placeholder', opt.defaultMessage)
+                $(selector).attr('placeholder', opt.defaultMessage);
 
             } else {
-                aux = aux.substr(0, aux.indexOf("_"));
-                var val = v;
-                if(rmk.indexOf('text') != -1 && rmk.indexOf('value') != -1){
-                    var pv = rmk.split('value');
+				if(typeof aux != "undefined"){
+					aux = aux.substr(0, aux.indexOf("_"));
+					var val = v;
+					if(rmk.indexOf('text') != -1 && rmk.indexOf('value') != -1){
+						var pv = rmk.split('value');
 
-                    var l = val.split(rmk.replace('value', '').replace('text', ''));
-                    $('#'+vst).val(l[pv[0]==''?0:1]);
-                    $('#'+aux).val(l[pv[0]==''?1:0]);
-                } else {
-                    $('#'+aux).val(val);
-                    if(opt.value_selected_to != "") $('#'+vst).val(e.getAttribute("data-value"));
-                }
+						var l = val.split(rmk.replace('value', '').replace('text', ''));
+						$('#'+vst).val(l[pv[0]==''?0:1]);
+						$('#'+aux).val(l[pv[0]==''?1:0]);
+					} else {
+						$('#'+aux).val(val);
+						if(opt.value_selected_to != "") $('#'+vst).val(e.getAttribute("data-value"));
+					}
+				} else {
+					$('#'+aux).val('');
+					if(opt.value_selected_to != "") $('#'+vst).val('');
+					return false;
+				}
             }
             $('#'+$(e).parent().attr("id")).hide();
         }
@@ -381,14 +238,204 @@ $.fn.dataList = function(options) {
         if($(selector)[0].nodeName == "INPUT") {
             $(selector).val($('#'+$(selector).attr(opt.datalistAttr) + ' option[value="'+opt.default_value+'"]').text());
             if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val(opt.default_value);
+			
         } else {
             document.getElementById(selector.replace('#', '')).value=opt.default_value;
         }
     }
-
-    if(!opt.ajax){
-        $(window).on("load", function (){
-            assignByDefault();
-        });
+	
+	function assignSelected(value){
+	    if($(selector)[0].nodeName == "INPUT") {
+            $(selector).val($('#'+$(selector).attr(opt.datalistAttr) + ' option[value="'+value+'"]').text());
+            if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val(value);
+			
+        } else {
+            document.getElementById(selector.replace('#', '')).value=value;
+        }
     }
+	
+	var methods = {
+		init: function(options) {
+			if(!isMobile()) {
+				$(selector).before('<input autocomplete="off" />');
+				
+				var selName = selector.replace("#", '');
+				var c = document.getElementById(selName);
+
+				// Copy the attriibutes to new input
+				for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){
+					var attr = atts[i].nodeName;
+					dataListTarget.prev().attr(attr, dataListTarget.attr(attr));
+					if(attr == 'multiple') multiple = true;
+					if(attr == 'required') required = true;
+				}
+
+				if(multiple) dataListTarget.prev().removeAttr("name");
+				if(required && multiple) dataListTarget.prev().removeAttr("required");
+
+				// Remove attributes to selector
+				dataListTarget.prev().attr(opt.datalistAttr, selName+'_dataList');
+				for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){ dataListTarget.removeAttr(atts[0].nodeName); }
+
+				// Hide the select tag
+				$(selector).next().attr('id', selName+'_dataList').css('display', 'none');
+				dataListTarget = $('input'+selector);
+				get(selName, '', $('#'+$('#'+selName).attr(opt.datalistAttr)).next(), dataListTarget, $(selName));
+
+				// If selector is multiple
+				if(multiple){
+					var c = " ";
+					if(opt.multiple_class != "") c += opt.multiple_class;
+					valueList = $('<div class="valueList_dataList '+selName+c+'"></div>').insertAfter('#'+dataListTarget.attr(opt.datalistAttr));
+					if($('head').html().indexOf('.valueList_dataList > div > span{ float: right; margin:0 0 0 10px; cursor: pointer; }') == -1)
+						$("<style type='text/css'> .valueList_dataList > div > span{ float: right; margin:0 0 0 10px; cursor: pointer; } </style>").appendTo("head");
+				}
+
+				// Insert unsorted list after selector
+				$('<ul></ul>').insertAfter('#'+dataListTarget.attr(opt.datalistAttr)).hide();
+
+				// If dataList is multiple and required, add new associate event
+				if(required && multiple){
+					var frm = $(selector).parents('form');
+					$(frm).submit(function(e){
+						if($('input', valueList).length == 0){
+							if(opt.placeholder){
+								$(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError);
+							} else {
+								$(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError);
+							}
+
+							e.preventDefault();
+							return false;
+					   }
+					});
+				}
+
+				// Double Click Event
+				$(selector).on("focusin", function(e){
+					if(opt.clearOnFocus) $(this).val("");
+					
+					var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
+					obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
+					var val = $(this).val().toUpperCase();
+					if(val == '' && $('li', obj).length == 0) get($(this).attr("id"), val, obj, dataListTarget, e);
+					else search(val, obj, dataListTarget, e);
+					$(this).attr("data-before", $(this).val());
+				});
+
+				$(selector).on("focusout", function(e){ unselectText(e); if(opt.clearOnFocus && opt.default_value != "" && $(this).val() == "") assignSelected(opt.default_value)  });
+
+				// KeyUp Event
+				$(selector).on("keyup", function(e){
+					var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
+					obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
+					var val = $(this).val().toUpperCase();
+
+					if((e.keyCode == 27 || ((e.keyCode == 8 || e.keyCode == 46)) && val=="") || (e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40 && e.keyCode != 9)){
+						get($(this).attr("id"), val, obj, dataListTarget, e);
+					}
+				});
+
+				// KeyDown Event
+				$(selector).on("keydown", function(e){
+					var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
+					obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
+					var val = $(this).val().toUpperCase();
+
+					if(e.which == 27){ $(selector).val($(selector).attr("data-before")); }
+
+					if(e.keyCode == 40){
+						if(empty($('#'+obj.attr("id")))) return false;
+						if(obj.css("display") == 'none'){
+							if(val == '' && $('li', obj).length == 0) get($(this).attr("id"), val, obj, dataListTarget, e);
+							else search(val, obj, dataListTarget, e);
+						}
+						obj.show();
+						var firstSel = $('li.hover:first', obj);
+						if(firstSel.length > 0 && firstSel.length - firstSel.index() != 1){ var target = firstSel.next(); } else { var target = $('li:not(.hover):first', obj); }
+
+						target.addClass("hover");
+						if(firstSel.length > 0) firstSel.removeClass("hover");
+						if(firstSel.index() == $('li',obj).length -1) { target = $('li:not(.hover):first', obj); target.addClass("hover"); }
+
+						var s = target.parent().scrollTop(), h = target.parent().height(), p = target.position().top;
+						if(p +target.innerHeight() > h) target.parent().scrollTop(s+target.innerHeight());
+						else if(p <= 0) target.parent().scrollTop(0);
+
+					} else if(e.keyCode == 38){
+						if(empty($('#'+obj.attr("id")))) return false;
+						var firstSel = $('li.hover:first', obj);
+						if(firstSel.length > 0){ var target = firstSel.prev(); } else { var target = $('li:not(.hover):first', obj); }
+
+						target.addClass("hover");
+						if(firstSel.length > 0) firstSel.removeClass("hover");
+						if(firstSel.index() == 0) { target = $('li:not(.hover):last', obj); target.addClass("hover"); }
+
+						var s = target.parent().scrollTop(), h = target.parent().height(), p = target.position().top;
+						if(p < 0) target.parent().scrollTop(s+p);
+						else if(s == 0 && p == target.innerHeight()*target.index()) target.parent().scrollTop(p-h+target.innerHeight());
+					} else if(e.keyCode == 9){
+						var e = $.Event('keypress');
+						e.which = 13;
+						$('#'+$(this).attr("id")).trigger(e);
+						$('input['+opt.datalistAttr+'] + * + ul').hide();
+
+					} else if((e.keyCode == 27 || ((e.keyCode == 8 || e.keyCode == 46)) && val=="") || e.keyCode != 13){
+						get($(this).attr("id"), val, obj, dataListTarget, e);
+					}
+				});
+
+				$('body').on('click.hideMenu', function(e) { if(e.target.id != selector.replace("#", '')) $('input['+opt.datalistAttr+'] + * + ul').hide();});
+				$(selector).on("keypress", function(e){ if(e.which == 13){ var targetID = $('#'+$(e.target).attr(opt.datalistAttr)+"_ul li.hover"); select(targetID[0], targetID.html()); return false; } });
+
+				$(selector).focusin(function(e){ if(!opt.placeholder){ if($(e.target).val() == opt.requiredMessage) $(e.target).val('')}});
+				$(selector).focusout(function(e){
+					setTimeout(function(){ isValid(); }, 100);
+				});
+
+			} else {
+				var vst = opt.value_selected_to;
+				if(vst != ""){
+					$(selector).on("change", function(){
+						$('#'+vst).val($(this).val());
+					});
+				}
+				get(selector, '', null, dataListTarget, null);
+			}
+			
+			if(!opt.ajax){
+				window.onload = function (){
+					assignByDefault();
+					if(opt.selected_value != "") assignSelected(opt.selected_value);
+				};
+			}
+			if(opt.selected_value != ""){ assignSelected(opt.selected_value); }
+			
+			return this;
+		},
+		update: function(value) {
+			assignSelected(value);
+		},
+		destroy: function() {
+			var selName = selector.replace("#", '');
+			var c = document.getElementById(selName);
+			var jqc = $(c);
+
+			// Copy the attriibutes to new input
+			for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){
+				var attr = atts[i].nodeName;
+				jqc.next().attr(attr, jqc.attr(attr));
+			}
+			jqc.next().next().remove();
+			jqc.next().css("display", '');
+			jqc.remove();
+		}
+	};
+	
+	if ( typeof options === 'object' || ! options ) {
+		// Default to "init"
+		return methods.init.apply( this, arguments );
+	} else if ( methods[options] ) {
+		return methods[ options ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+	} 
 };
