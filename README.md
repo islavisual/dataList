@@ -1,4 +1,4 @@
-# dataList 1.09
+# dataList 1.10
 dataList is a jQuery plugin to make, easier and usable the use of drop down elements by adding predictive search, events management and styles. In addition, you can combine this plugin with the Bootstrap capabilities or another frameworks.
 
 Is multilanguage, cross browser compatibility, very customizable and, by your design, is one of fastest of internet.
@@ -38,6 +38,8 @@ Basic Use
 
 <script>
     $('#select').dataList();
+    // To Select third item of list after initialize it
+    $('#select').dataList({selected_value: '3'});
 </script>
 ```
 
@@ -57,8 +59,10 @@ Advanced Use
 </div>
 
 <script>
-    var optionsDT = { default_value: 'es' };
-    $('#languages').dataList(optionsDT);
+    // To set a default value
+    $('#languages').dataList(default_value: 'es');
+    // To select one value
+    $('#languages').dataList(selected_value: 'en');
 </script>
 ```
 
@@ -171,6 +175,8 @@ Default messages Description
 ----------------------------
 __addClassIfError__: If an error is produced, is added this value to 'class' attribute. By default is "error".
 
+__autoSelectable__: To mark the first element automaticaly when the dataList takes focus.
+
 __ajax__: This parameter indicates if the read/recovery of data will do in asynchronous / synchronous mode. By default is 'false'.
 
 __ajaxErrorMessage__: Error message if the read/recovery of data fail. By default is 'Request failed'.
@@ -229,6 +235,8 @@ var optionsDT = { return_mask: 'text' };
 var optionsDT = { return_mask: 'value' };
 var optionsDT = { return_mask: 'value - text' };
 ```
+
+__selected_value__: To select one value. After to initialize or through update method.
 
 __url__: This parameter indicates the URL where data will recover and, more later, will inserted in 'select tag'. 
 
