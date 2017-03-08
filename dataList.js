@@ -1,7 +1,7 @@
-// dataList 1.10 (https://github.com/islavisual/dataList).
+// dataList 1.11 (https://github.com/islavisual/dataList).
 // Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 07/03/2017
+// Last update: 08/03/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         autoSelectable: false,
@@ -27,6 +27,7 @@ $.fn.dataList = function(options) {
         errorUnknown:'Unknown error',
         method: "post",
         multiple_class:'',
+        onChange: null,
         parameterToSend:"query",
         requiredMessage:'Please, enter at least one value',
         return_mask:"text",
@@ -190,11 +191,15 @@ $.fn.dataList = function(options) {
                 } else {
                     $('#'+aux).val('');
                     if(opt.value_selected_to != "") $('#'+vst).val('');
-                    return false;
+                    //return false;
                 }
             }
             $('#'+$(e).parent().attr("id")).hide();
         }
+        
+        // If OnChange parameter is sent
+		if(opt.onChange != null){ eval(opt.onChange); }
+        
         if(required) dataListTarget.prev().removeAttr("required");
     }
 
