@@ -1,4 +1,4 @@
-# dataList 1.10
+# dataList 1.12
 dataList is a jQuery plugin to make, easier and usable the use of drop down elements by adding predictive search, events management and styles. In addition, you can combine this plugin with the Bootstrap capabilities or another frameworks.
 
 Is multilanguage, cross browser compatibility, very customizable and, by your design, is one of fastest of internet.
@@ -18,6 +18,12 @@ Your install is very easy. Only you must insert the following source code files.
 <script src="js/dataList.js"></script>
 <link href="css/dataList.css" rel="stylesheet">
 ```
+
+Methods
+==========
+__update__: TODO_DOC
+__destroy__: TODO_DOC
+__onChange__: TODO_DOC
 
 How to use
 ==========
