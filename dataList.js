@@ -322,7 +322,10 @@ $.fn.dataList = function(options) {
 
                 // Double Click Event
                 $(selector).on("focusin", function(e){
-                    if(opt.clearOnFocus) $(this).val("");
+                    if(opt.clearOnFocus){
+                        $(this).val("");
+                        if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val('');
+                    }
                     
                     var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
                     obj.attr("id", $(e.target).attr(opt.datalistAttr)+"_ul");
