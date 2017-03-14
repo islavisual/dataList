@@ -139,7 +139,8 @@ __DataList configuration simulating a SELECT tag__
 ```
 
 __Another configuration to value_selected_to__
-NOTE: To can use this option is necessary set "return_mask" property to 'value - text'.
+
+_NOTE: To can use this option is necessary set "return_mask" property to 'value - text'._
 ```javascript 
 var optionsDT = { value_selected_to: 'depends_id' };
 ```
