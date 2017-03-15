@@ -1,7 +1,7 @@
 // dataList 2.0b (https://github.com/islavisual/dataList).
 // Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 14/03/2017
+// Last update: 15/03/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         autoSelectable: false,
@@ -25,7 +25,7 @@ $.fn.dataList = function(options) {
         errorParse:'Parsing JSON request failed',
         errorTimeOut:'Request time out',
         errorUnknown:'Unknown error',
-		loadingMessage: 'Loading...',
+        loadingMessage: 'Loading...',
         method: "post",
         multiple_class:'',
         onChange: null,
@@ -192,7 +192,6 @@ $.fn.dataList = function(options) {
                 } else {
                     $('#'+aux).val('');
                     if(opt.value_selected_to != "") $('#'+vst).val('');
-                    //return false;
                 }
             }
             $('#'+$(e).parent().attr("id")).hide();
@@ -209,6 +208,12 @@ $.fn.dataList = function(options) {
         var et  = e.target;
         
         if(typeof ul[0] == "undefined") return;
+
+		var items = document.querySelectorAll('ul[id*="_dataList_ul"]');
+		for(var z = 0; z < items.length; ++z){
+			var item = items[z];
+			item.style['display'] = "none";
+		}
 		
 		if(ul.html() != ''){ 
 			var aux = $('li', $('#'+input.attr(sdt)).next());
