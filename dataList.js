@@ -1,7 +1,7 @@
-// dataList 2.0b (https://github.com/islavisual/dataList).
+// dataList 2.0 (https://github.com/islavisual/dataList).
 // Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 15/03/2017
+// Last update: 16/03/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         autoSelectable: false,
@@ -40,15 +40,16 @@ $.fn.dataList = function(options) {
 
     var dataListTarget = $(this);
     var selector  = "#"+$(this).attr("id");
-    var multiple  = false;
-    var required  = false;
+    var multiple  = typeof $(this).attr('multiple') != "undefined";
+    var required  = typeof $(this).attr('required') != "undefined";
     var valueList = null;
+    var divLayer  = '<div>{text}<input type="hidden" value="{value}" name="'+selector.replace('#', '')+'[]"><span onclick="event.preventDefault(); event.stopImmediatePropagation(); $(this).parent().remove();">X</span></div>';
     
     function unselectText(e){ try { $(e.target).get(0).selectionStart = $(e.target).get(0).value.length; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } catch(ex) {}}
     function selectFirst(){ $('#'+$(selector).attr(opt.datalistAttr)+"_ul li").removeClass('hover'); var item = $('#'+$(selector).attr(opt.datalistAttr)+"_ul").find("li:visible:first"); if(item.html() != opt.emptyMessage && opt.autoSelectable) item.addClass("hover"); }
     function selectText(e){ try { if(isTextSelected($(e.target).get(0))){ $(e.target).get(0).selectionStart = 0; $(e.target).get(0).selectionEnd = $(e.target).get(0).value.length; } } catch(ex) {}}
     function isTextSelected(input) { if (typeof input.selectionStart == "number") { return input.selectionStart == 0 && input.selectionEnd == input.value.length; } else if (typeof document.selection != "undefined") { input.focus(); return document.selection.createRange().text == input.value; }}
-    function isValid(){ if(opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError) } else if(!opt.placeholder && ((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)) && required){ $(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError) } else { $(selector).removeAttr('title').removeClass(opt.addClassIfError)}}
+    function isValid(){ $(selector).removeAttr('title').removeClass(opt.addClassIfError); if((!multiple && $(selector).val() == '') || (multiple && $('input', valueList).length == 0)){ if(opt.placeholder &&  required){ $(selector).attr('placeholder', opt.requiredMessage).addClass(opt.addClassIfError) } else if(!opt.placeholder && required){ $(selector).attr('title', opt.requiredMessage).val(opt.requiredMessage).addClass(opt.addClassIfError) } } }
     function isMobile() { return ('ontouchstart' in document.documentElement);}
     function empty(e){ if(e.css("display") != 'none' && e.html().indexOf(opt.emptyMessage) != -1) return true; return false; }
 
@@ -73,26 +74,9 @@ $.fn.dataList = function(options) {
                     }
                 }
 
-                if(isMobile()){
-                    if(opt.selected_value != ""){
-                        var defaultItem = null;
-                        $(selector).html('<option value="" >'+opt.defaultMessage+'</option>'+s);
-                        var items = $(selector+' option');
-                        for(var x = 0; x < items.length; ++x){
-                            var item = $(items[x]);
-                            if(item.val() == opt.selected_value){ item.attr('selected', 'selected'); defaultItem = item; }
-                        }
-                    } else {
-                        $(selector).html('<option value="" selected="selected" >'+opt.defaultMessage+'</option>'+s);
-                    }
-                    if(defaultItem != null && opt.value_selected_to != ""){
-                        $('#'+opt.value_selected_to).val(defaultItem.val());
-                    }
-                } else {
-                    $('#'+input.attr(opt.datalistAttr)).html(s);
-                    search(val, ul, input, e);
-                    if(val == "")  ul.hide();
-                }
+                $('#'+input.attr(opt.datalistAttr)).html(s);
+                search(val, ul, input, e);
+                if(val == "")  ul.hide();
 
                 assignByDefault();
 
@@ -131,13 +115,12 @@ $.fn.dataList = function(options) {
         var vst = opt.value_selected_to;
         var rmk = opt.return_mask;
         var sep = rmk.replace('value', '').replace('text', '');
-        var div = '<div>{text}<input type="hidden" value="{value}" name="'+selector.replace('#', '')+'[]"><span onclick="event.preventDefault(); event.stopImmediatePropagation(); $(this).parent().remove();">X</span></div>';
         var aux = $(e).parent().attr("id");
 
         if(opt.allowNewValues && typeof v == "undefined"){
             if(multiple){
-                div = div.replace('{text}', $(selector).val());
-                div = div.replace('{value}', '0');
+                var div = divLayer.replace('{text}', $(selector).val());
+                    div = div.replace('{value}', '0');
                 valueList.append(div);
                 $(selector).val('');
 
@@ -165,8 +148,9 @@ $.fn.dataList = function(options) {
                 for(var x=0; x < aux.length; x++){
                     arr[aux[x]] = val[x];
                 }
+                var div = "";
                 if(opt.dataRanking && arr.text.indexOf(" (") != -1) arr.text = arr.text.substr(0, arr.text.indexOf(" ("));
-                if(typeof arr.value != 'undefined' && arr.value != "") div = div.replace('{value}', arr.value);
+                if(typeof arr.value != 'undefined' && arr.value != "") div = divLayer.replace('{value}', arr.value);
                 if(typeof arr.text != 'undefined' && arr.text != "") div = div.replace('{text}', arr.text);
 
                 idx = arr.text;
@@ -198,7 +182,7 @@ $.fn.dataList = function(options) {
         }
         
         // If OnChange parameter is sent
-		if(opt.onChange != null){ eval(opt.onChange); }
+        if(opt.onChange != null){ eval(opt.onChange); }
         
         if(required) dataListTarget.prev().removeAttr("required");
     }
@@ -209,85 +193,85 @@ $.fn.dataList = function(options) {
         
         if(typeof ul[0] == "undefined") return;
 
-		var items = document.querySelectorAll('ul[id*="_dataList_ul"]');
-		for(var z = 0; z < items.length; ++z){
-			var item = items[z];
-			item.style['display'] = "none";
-		}
-		
-		if(ul.html() != ''){ 
-			var aux = $('li', $('#'+input.attr(sdt)).next());
-			for(var i=0; i<aux.length; i++){
-				var item = aux.eq(i)[0];
-				if(item.getAttribute("data-value").toUpperCase().indexOf(val.toUpperCase()) == -1 && item.innerHTML.toUpperCase().indexOf(val.toUpperCase()) == -1){
-					item.style["display"] = "none";
-				} else {
-					item.style["display"] = "";
-				}
-			}
-			if(multiple){
-				var mis = $('input', valueList);
-				var lst = "";
-				for(var x = 0; x < mis.length; ++x){
-					var mi = $(mis[x]);
-					lst += "|"+mi.val()+"|";
-				}
-				for(var i=0; i<aux.length; i++){
-					var item = aux.eq(i)[0];
-					if(lst.indexOf("|"+item.getAttribute("data-value")+"|") != -1) item.style["display"] = "none";
-				}
-			}
-			
-			ul.show();
+        var items = document.querySelectorAll('ul[id*="_dataList_ul"]');
+        for(var z = 0; z < items.length; ++z){
+            var item = items[z];
+            item.style['display'] = "none";
+        }
+        
+        if(ul.html() != ''){ 
+            var aux = $('li', $('#'+input.attr(sdt)).next());
+            for(var i=0; i<aux.length; i++){
+                var item = aux.eq(i)[0];
+                if(item.getAttribute("data-value").toUpperCase().indexOf(val.toUpperCase()) == -1 && item.innerHTML.toUpperCase().indexOf(val.toUpperCase()) == -1){
+                    item.style["display"] = "none";
+                } else {
+                    item.style["display"] = "";
+                }
+            }
+            if(multiple){
+                var mis = $('input', valueList);
+                var lst = "";
+                for(var x = 0; x < mis.length; ++x){
+                    var mi = $(mis[x]);
+                    lst += "|"+mi.val()+"|";
+                }
+                for(var i=0; i<aux.length; i++){
+                    var item = aux.eq(i)[0];
+                    if(lst.indexOf("|"+item.getAttribute("data-value")+"|") != -1) item.style["display"] = "none";
+                }
+            }
+            
+            ul.show();
 
-			selectFirst();
-			selectText(e);
-			
-		} else {
-			var auxPHldr = $(selector).attr('placeholder');
-			$(selector).attr('placeholder', opt.loadingMessage + " " + auxPHldr);
-			
-			setTimeout(function () {
-				var aux = $('#'+input.attr(sdt)+' option');
-				var ulEmpty = true;
-				
-				ul = ul[0];
-				ul.innerHTML = '';
-				for(var i=0; i<aux.length; i++){
-					var item = aux.eq(i)[0];
-					var dataRank = typeof item.getAttribute('data-rank') != 'undefined';
+            selectFirst();
+            selectText(e);
+            
+        } else {
+            var auxPHldr = $(selector).attr('placeholder');
+            $(selector).attr('placeholder', opt.loadingMessage + " " + auxPHldr);
+            
+            setTimeout(function () {
+                var aux = $('#'+input.attr(sdt)+' option');
+                var ulEmpty = true;
+                
+                ul = ul[0];
+                ul.innerHTML = '';
+                for(var i=0; i<aux.length; i++){
+                    var item = aux.eq(i)[0];
+                    var dataRank = typeof item.getAttribute('data-rank') != 'undefined';
 
-					if(item.value.toUpperCase().indexOf(val) != -1 || item.text.toUpperCase().indexOf(val) != -1){
-						ulEmpty = false;
-						var mask = opt.return_mask.replace('value', item.value).replace('text', item.text);
-						if(opt.dataRanking && dataRank) mask += " ("+item.getAttribute('data-rank')+'<span class="fa fa-star"></span>)';
-						if(!multiple){
-							ul.innerHTML = ul.innerHTML + (dataRank?('<li data-rank="'+item.getAttribute('data-rank')+'" data-value="'+item.value+'">'):('<li data-value="'+item.value+'">'))+mask+'</li>';
-						} else {
-							var mis = $('input', valueList);
-							var lst = "";
-							for(var x = 0; x < mis.length; ++x){
-								var mi = $(mis[x]);
-								lst += "|"+mi.val()+"|";
-							}
-							if(lst.indexOf("|"+item.value+"|") == -1) ul.innerHTML = ul.innerHTML + (dataRank?('<li data-rank="'+item.getAttribute('data-rank')+'" data-value="'+item.value+'">'):('<li data-value="'+item.value+'">'))+mask+'</li>';
-						}
-					}
-				}
-				if(ulEmpty) ul.innerHTML = ul.innerHTML + '<li style="cursor: text">'+opt.emptyMessage+'</li>';
-				ul = $(ul);
-				
-				$('#'+$(et).attr(sdt)+"_ul li").off("mouseover click");
-				$('#'+$(et).attr(sdt)+"_ul li").on("mouseover", function(e){ if(empty($(this))) return false; $(this).parent().find('li').removeClass("hover"); $(this).addClass("hover"); });
-				$('#'+$(et).attr(sdt)+"_ul li").on("click", function(e){ if(empty($(this))) return false; select(e.target, $(this).html()); });
-				
-				$(selector).attr('placeholder', auxPHldr);
-				
-				ul.show();
-				selectFirst();
-				selectText(e);
-			}, 25);
-		}
+                    if(item.value.toUpperCase().indexOf(val) != -1 || item.text.toUpperCase().indexOf(val) != -1){
+                        ulEmpty = false;
+                        var mask = opt.return_mask.replace('value', item.value).replace('text', item.text);
+                        if(opt.dataRanking && dataRank) mask += " ("+item.getAttribute('data-rank')+'<span class="fa fa-star"></span>)';
+                        if(!multiple){
+                            ul.innerHTML = ul.innerHTML + (dataRank?('<li data-rank="'+item.getAttribute('data-rank')+'" data-value="'+item.value+'">'):('<li data-value="'+item.value+'">'))+mask+'</li>';
+                        } else {
+                            var mis = $('input', valueList);
+                            var lst = "";
+                            for(var x = 0; x < mis.length; ++x){
+                                var mi = $(mis[x]);
+                                lst += "|"+mi.val()+"|";
+                            }
+                            if(lst.indexOf("|"+item.value+"|") == -1) ul.innerHTML = ul.innerHTML + (dataRank?('<li data-rank="'+item.getAttribute('data-rank')+'" data-value="'+item.value+'">'):('<li data-value="'+item.value+'">'))+mask+'</li>';
+                        }
+                    }
+                }
+                if(ulEmpty) ul.innerHTML = ul.innerHTML + '<li style="cursor: text">'+opt.emptyMessage+'</li>';
+                ul = $(ul);
+                
+                $('#'+$(et).attr(sdt)+"_ul li").off("mouseover click");
+                $('#'+$(et).attr(sdt)+"_ul li").on("mouseover", function(e){ if(empty($(this))) return false; $(this).parent().find('li').removeClass("hover"); $(this).addClass("hover"); });
+                $('#'+$(et).attr(sdt)+"_ul li").on("click", function(e){ if(empty($(this))) return false; select(e.target, $(this).html()); });
+                
+                $(selector).attr('placeholder', auxPHldr);
+                
+                ul.show();
+                selectFirst();
+                selectText(e);
+            }, 25);
+        }
     }
 
     function assignByDefault(){
@@ -301,18 +285,31 @@ $.fn.dataList = function(options) {
     }
     
     function assignSelected(value){
-        if($(selector)[0].nodeName == "INPUT") {
-            $(selector).val($('#'+$(selector).attr(opt.datalistAttr) + ' option[value="'+value+'"]').text());
-            if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val(value);
-            
+        if(multiple){
+            if(typeof value == "object"){
+                valueList = $('.valueList_dataList', $(selector).parent());
+                
+                for(var i = 0; i < value.length; ++i){
+                    var div = divLayer.replace('{text}', value[i].text);
+                        div = div.replace('{value}', value[i].value);
+                    valueList.append(div);
+                }
+            } else {
+                $(selector).attr("title", opt.errorParse).attr("placeholder", opt.errorParse).addClass(opt.addClassIfError);
+            }
         } else {
-            document.getElementById(selector.replace('#', '')).value=value;
+            if($(selector)[0].nodeName == "INPUT") {
+                $(selector).val($('#'+$(selector).attr(opt.datalistAttr) + ' option[value="'+value+'"]').text());
+                if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val(value);
+                
+            } else {
+                document.getElementById(selector.replace('#', '')).value=value;
+            }
         }
     }
     
     var methods = {
         init: function(options) {
-            if(!isMobile()) {
                 $(selector).before('<input autocomplete="off" />');
                 
                 var selName = selector.replace("#", '');
@@ -322,8 +319,6 @@ $.fn.dataList = function(options) {
                 for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){
                     var attr = atts[i].nodeName;
                     dataListTarget.prev().attr(attr, dataListTarget.attr(attr));
-                    if(attr == 'multiple') multiple = true;
-                    if(attr == 'required') required = true;
                 }
 
                 if(multiple) dataListTarget.prev().removeAttr("name");
@@ -367,14 +362,14 @@ $.fn.dataList = function(options) {
                     });
                 }
 
-                // Double Click Event
+                // Focusin Event
                 $(selector).on("focusin", function(e){
                     if(opt.clearOnFocus){
                         $(this).val("");
                         if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val('');
-						var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
-						var trg = $('li:visible:first', obj);
-						trg.parent().scrollTop(0);
+                        var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
+                        var trg = $('li:visible:first', obj);
+                        trg.parent().scrollTop(0);
                     }
                     
                     var obj = $('#'+$(e.target).attr(opt.datalistAttr)).next();
@@ -413,14 +408,14 @@ $.fn.dataList = function(options) {
                             else search(val, obj, dataListTarget, e);
                         }
                         obj.show();
-						
+                        
                         var firstSel = $('li.hover:visible:first', obj);
 
-						if(firstSel.length > 0 && firstSel.length - firstSel.index() != 1){ var target = firstSel.nextAll( 'li:visible:first'); } else { var target = $('li:not(.hover):visible:first', obj); }
+                        if(firstSel.length > 0 && firstSel.length - firstSel.index() != 1){ var target = firstSel.nextAll( 'li:visible:first'); } else { var target = $('li:not(.hover):visible:first', obj); }
                         if(target.length == 0) { target = $('li:visible:first', obj); }
 
-						firstSel.removeClass("hover");
-						target.addClass("hover");
+                        firstSel.removeClass("hover");
+                        target.addClass("hover");
 
                         var s = target.parent().scrollTop(), h = target.parent().height(), p = target.position().top;
                         if(p +target.innerHeight() > h) target.parent().scrollTop(s+target.innerHeight());
@@ -431,16 +426,16 @@ $.fn.dataList = function(options) {
                         var firstSel = $('li.hover:visible:first', obj);
 
                         if(firstSel.length > 0){ var target = firstSel.prevAll( 'li:visible:first'); } else { var target = $('li:visible:not(.hover):first', obj); }
-						if(target.length == 0) { target = $('li:visible:last', obj); }
+                        if(target.length == 0) { target = $('li:visible:last', obj); }
 
                         firstSel.removeClass("hover");
-						target.addClass("hover");
-						
+                        target.addClass("hover");
+                        
                         var s = target.parent().scrollTop(), h = target.parent().height(), p = target.position().top;
                         if(p +target.innerHeight() > h) target.parent().scrollTop(s+target.innerHeight());
                         else target.parent().scrollTop(s+p);
-						if($('li:visible:last', obj).hasClass("hover")) target.parent().scrollTop(s+p);
-						
+                        if($('li:visible:last', obj).hasClass("hover")) target.parent().scrollTop(s+p);
+                        
                     } else if(e.keyCode == 9){
                         var e = $.Event('keypress');
                         e.which = 13;
@@ -452,23 +447,13 @@ $.fn.dataList = function(options) {
                     }
                 });
 
-				$('body').on('click.hideMenu', function(e) { if (typeof $(e.target).data("list") == "undefined" || $(e.target).data("list").indexOf("_dataList") == -1) $('input[' + opt.datalistAttr + '] + * + ul').hide(); }); 
+                $('body').on('click.hideMenu', function(e) { if (typeof $(e.target).data("list") == "undefined" || $(e.target).data("list").indexOf("_dataList") == -1) $('input[' + opt.datalistAttr + '] + * + ul').hide(); }); 
                 $(selector).on("keypress", function(e){ if(e.which == 13){ var targetID = $('#'+$(e.target).attr(opt.datalistAttr)+"_ul li.hover"); select(targetID[0], targetID.html()); return false; } });
 
                 $(selector).focusin(function(e){ if(!opt.placeholder){ if($(e.target).val() == opt.requiredMessage) $(e.target).val('')}});
                 $(selector).focusout(function(e){
-                    setTimeout(function(){ isValid(); }, 100);
+                    setTimeout(function(){ isValid(); }, 250);
                 });
-
-            } else {
-                var vst = opt.value_selected_to;
-                if(vst != ""){
-                    $(selector).on("change", function(){
-                        $('#'+vst).val($(this).val());
-                    });
-                }
-                get(selector, '', null, dataListTarget, null);
-            }
             
             if(!opt.ajax){
                 window.onload = function (){
@@ -482,6 +467,9 @@ $.fn.dataList = function(options) {
         },
         update: function(value) {
             assignSelected(value);
+        },
+        change: function(value){
+            if(opt.onChange != null){ eval(value); }
         },
         destroy: function() {
             var selName = selector.replace("#", '');
