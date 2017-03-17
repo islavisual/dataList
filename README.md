@@ -38,14 +38,29 @@ Basic Use
 
 <script>
     $('#select').dataList();
-    // To Select third item of list after initialize it
-    $('#select').dataList({selected_value: 'c'});
+</script>
+```
+__Basic Use with selected value__
+
+```html
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        <select id="select" class="form-control" placeholder="Please, enter a choice">
+            <option value="a">Option A</option>
+            <option value="b" selected="selected">Option B</option>
+            <option value="c">Option C</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    $('#select').dataList();
 </script>
 ```
 
 Advanced Use
 ------------
-__Set default value or selected value__
+__Set a default value attribute__
 
 ```html
 <div class="row">
@@ -60,9 +75,25 @@ __Set default value or selected value__
 </div>
 
 <script>
-    // To set a default value
     $('#languages').dataList(default_value: 'es');
-    // To select one value
+</script>
+```
+
+__Set a selected value through attribute__
+
+```html
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        <select multiple id="languages" class="form-control" placeholder="Please, enter a choice">
+            <option value="en">English</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="es">Spain</option>
+        </select>
+    </div>
+</div>
+
+<script>
     $('#languages').dataList(selected_value: 'en');
 </script>
 ```
@@ -101,13 +132,7 @@ __DataList configuration of type multiple with custom parameters__
 </div>
 
 <script>
-    var optionsDT = {
-        emptyMessage:'Not found results',
-        parameterToSend:'q',
-        return_mask:'value - text',
-        multiple_class: 'form-control'
-    };
-    $('#users').dataList(optionsDT);
+    $('#users').dataList({parameterToSend:'q', return_mask:'value - text', multiple_class: 'form-control'});
 </script>
 ```
 
@@ -129,12 +154,7 @@ __DataList configuration simulating a SELECT tag__
 </div>
 
 <script>
-    var optionsDT = {
-        return_mask:'text',
-        value_selected_to:'username', 
-        clearOnFocus: true
-    };
-    $('#usernameList').dataList(optionsDT);
+    $('#usernameList').dataList({return_mask:'text', value_selected_to:'username', clearOnFocus: true});
 </script>
 ```
 
@@ -162,16 +182,19 @@ And an example of HTML will be:
     </div>
 </div>
 <script>
-    var optionsDT = { value_selected_to: 'depends_id', return_mask: 'value - text' };
-    $('#tasks').dataList(optionsDT);
+    $('#tasks').dataList({value_selected_to: 'depends_id', return_mask: 'value - text'});
 </script>
 ```
 
 Methods
 -------
-__update__: Update the DataList component.
+__update__: Reset and update the DataList component. If dataList is "multiple" the sent value is must a object, anotherwise, the value must be string.
 ```javascript
+// Datalist in single mode
 $('#select').dataList('update', 'c');
+
+// Datalist in multiple mode
+$('#select').dataList('update', [{text: "Paul", value: '1'}, {text: "Helen", value: "2"}]);
 ```
 __destroy__: Destroy object and restore to before of initialize the dataList
 ```javascript
