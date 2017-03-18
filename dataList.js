@@ -1,7 +1,7 @@
 // dataList 2.0 (https://github.com/islavisual/dataList).
 // Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 17/03/2017
+// Last update: 18/03/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         autoSelectable: false,
@@ -377,6 +377,8 @@ $.fn.dataList = function(options) {
 
                 // Focusin Event
                 $(selector).on("focusin", function(e){
+					if(typeof e.target.getAttribute("readonly") == "string"){ $(e.target).blur(); return; }
+					
                     if(opt.clearOnFocus){
                         $(this).val("");
                         if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val('');
@@ -393,7 +395,7 @@ $.fn.dataList = function(options) {
                     $(this).attr("data-before", $(this).val());
                 });
 
-                $(selector).on("focusout", function(e){ unselectText(e); if(opt.clearOnFocus && opt.default_value != "" && $(this).val() == "") assignSelected(opt.default_value)  });
+                $(selector).on("focusout", function(e){ if(typeof e.target.getAttribute("readonly") == "string"){ $(e.target).blur(); return; } unselectText(e); if(opt.clearOnFocus && opt.default_value != "" && $(this).val() == "") assignSelected(opt.default_value)  });
 
                 // KeyUp Event
                 $(selector).on("keyup", function(e){
