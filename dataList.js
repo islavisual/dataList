@@ -1,7 +1,7 @@
 // dataList 2.0 (https://github.com/islavisual/dataList).
 // Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 18/03/2017
+// Last update: 24/03/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         autoSelectable: false,
@@ -141,7 +141,7 @@ $.fn.dataList = function(options) {
 
             $('#'+$(selector).attr(opt.datalistAttr)+"_ul").hide();
         } else {
-            if(multiple){
+            if(multiple && typeof v != "undefined"){
                 aux = rmk.split(sep);
                 var val = v.split(sep);
                 var arr = {};
@@ -318,7 +318,12 @@ $.fn.dataList = function(options) {
                 // Copy the attriibutes to new input
                 for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){
                     var attr = atts[i].nodeName;
-                    dataListTarget.prev().attr(attr, dataListTarget.attr(attr));
+                    
+                    if(attr.toLowerCase() == "onchange"){
+                        opt.onChange = dataListTarget.attr(attr);
+                    } else {
+                        dataListTarget.prev().attr(attr, dataListTarget.attr(attr));
+                    }
                 }
 
                 if(multiple) dataListTarget.prev().removeAttr("name");
@@ -361,24 +366,24 @@ $.fn.dataList = function(options) {
                        }
                     });
                 }
-				
-				// Auto insert selected items
-				var itemsSel = document.querySelectorAll(selector + " + select option");
-				for(var x = 0; x < itemsSel.length; ++x){
-					var itemSel = itemsSel[x];
-					if(typeof itemSel.getAttribute("selected") == "string"){
-						if(multiple){
-							assignSelected([{text: itemSel.text, value: itemSel.value}])
-						} else {
-							assignSelected(itemSel.value);
-						}
-					}
-				}
+                
+                // Auto insert selected items
+                var itemsSel = document.querySelectorAll(selector + " + select option");
+                for(var x = 0; x < itemsSel.length; ++x){
+                    var itemSel = itemsSel[x];
+                    if(typeof itemSel.getAttribute("selected") == "string"){
+                        if(multiple){
+                            assignSelected([{text: itemSel.text, value: itemSel.value}])
+                        } else {
+                            assignSelected(itemSel.value);
+                        }
+                    }
+                }
 
                 // Focusin Event
                 $(selector).on("focusin", function(e){
-					if(typeof e.target.getAttribute("readonly") == "string"){ $(e.target).blur(); return; }
-					
+                    if(typeof e.target.getAttribute("readonly") == "string"){ $(e.target).blur(); return; }
+                    
                     if(opt.clearOnFocus){
                         $(this).val("");
                         if(opt.value_selected_to != "") $('#'+opt.value_selected_to).val('');
@@ -481,8 +486,8 @@ $.fn.dataList = function(options) {
             return this;
         },
         update: function(value) {
-			valueList = $('.valueList_dataList', $(selector).parent());
-			valueList[0].innerHTML="";
+            valueList = $('.valueList_dataList', $(selector).parent());
+            valueList[0].innerHTML="";
             assignSelected(value);
         },
         change: function(value){
@@ -493,7 +498,7 @@ $.fn.dataList = function(options) {
             var c = document.getElementById(selName);
             var jqc = $(c);
 
-            // Copy the attriibutes to new input
+            // Copy the attributes to new input
             for (var i = 0, atts = c.attributes, n = atts.length; i < n; i++){
                 var attr = atts[i].nodeName;
                 jqc.next().attr(attr, jqc.attr(attr));
