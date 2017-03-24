@@ -201,6 +201,12 @@ __destroy__: Destroy object and restore to before of initialize the dataList
 $('#select').dataList('destroy');
 ```
 __onChange__: To call to external function when the dataList value is changed.
+
+Through to HTML
+```html
+<select id="tasks" class="form-control" placeholder="Search" onchange="callback()">...</select>
+```
+Or directly through plugin
 ```javascript
 $('#select').dataList({onchange: 'callback()'});
 ```
