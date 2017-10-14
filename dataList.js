@@ -1,7 +1,7 @@
-// dataList 2.0.1 (https://github.com/islavisual/dataList).
+// dataList 2.0.2 (https://github.com/islavisual/dataList).
 // Copyright 2015-2017 Islavisual. Licensed under MIT (https://github.com/islavisual/dataList/blob/master/LICENSE). 
 // Author: Pablo E. Fernández (islavisual@gmail.com). 
-// Last update: 27/05/2017
+// Last update: 14/10/2017
 $.fn.dataList = function(options) {
     var opt = $.extend({
         autoSelectable: false,
@@ -486,9 +486,25 @@ $.fn.dataList = function(options) {
             return this;
         },
         update: function(value) {
-            valueList = $('.valueList_dataList', $(selector).parent());
-            valueList[0].innerHTML="";
-            assignSelected(value);
+            if(multiple){
+                valueList = $('.valueList_dataList', $(selector).parent());
+                valueList[0].innerHTML="";
+                assignSelected(value);
+            } else {
+                var select = document.querySelector(selector+'_dataList'), aux = '';
+
+                select.innerHTML="";
+                select.nextElementSibling.innerHTML = '';
+
+                for(var x = 0; x < value.length; ++x){
+                    var item = value[x];
+
+                    aux += '<option value="'+item.value+'">'+item.text+'</option>';
+                }
+
+                select.innerHTML = aux;
+                document.querySelector(selector).focus();
+            }
         },
         change: function(value){
             if(opt.onChange != null){ eval(value); }
